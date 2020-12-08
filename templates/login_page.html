@@ -7,24 +7,38 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        // $.ajax({
-        //     type: "GET",
-        //     url: "/login",
-        //     data: {},
-        //     success: function (response) {
-        //         alert(response);
-        //     }
-        // });
+
+
+        function getLoginData() {
+            let id = $("#id-box").val();
+            let password = $("#password-box").val();
+            console.log(id)
+            console.log(password)
+            $.ajax({
+                type: "POST", // POST 방식으로 요청하겠다.
+                url: "/login", // /memo라는 url에 요청하겠다.
+                data: {id_give: id, password_give: password}, // 데이터를 주는 방법
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("login");
+
+                        window.location.reload();
+                    } else {
+                        alert("서버 오류!")
+                    }
+                }
+            })
+        }
 
 
     </script>
     <body>
-        <form method="post" action="/login">
-            <div style=" width: 100%; margin-top: 10%; display: flex; flex-direction: column; align-items: center; justify-content: center">
-                <input name=name type="text" placeholder="name">
-                <input name=password type="text" placeholder="password">
-                <input type="submit">
-            </div>
-        </form>
+    <!--        <form method="post" action="/login">-->
+    <div style=" width: 100%; margin-top: 10%; display: flex; flex-direction: column; align-items: center; justify-content: center">
+        <input id="id-box" name=id type="text" placeholder="id">
+        <input id="password-box" name=password type="text" placeholder="password">
+        <input type="submit" onclick="getLoginData()">
+    </div>
+    <!--        </form>-->
     </body>
 </html>

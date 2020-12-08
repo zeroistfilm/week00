@@ -18,6 +18,9 @@ def home():
     return render_template('login_page.html')
 
 
+@app.route('/main')
+def loadhome():
+    return render_template('login_page.html')
 
 @app.route('/signup', methods=['POST'])
 def signUp():
@@ -31,7 +34,7 @@ def signUp():
 
 
 
-@app.route('/session', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST', 'GET'])
 def session_test():
     result = "";
     if request.method == "GET":
