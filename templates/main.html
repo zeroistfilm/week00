@@ -17,20 +17,18 @@
         function logout() {
             window.location.href = 'http://54.180.91.148:5000/logout';
         }
-        function showDevelopHistory(){
 
+        function showDevelopHistory() {
 
 
             if ($('#develophistory').is(':empty')) {
                 console.log('sss')
-                let temphtml=``
+                let temphtml = ``
 
 
                 $("#develophistory").append(temphtml);
 
             }
-
-
 
 
             if ($("#develophistory").css("display") == "flex") {
@@ -45,17 +43,40 @@
             }
 
         }
-        function showday(id){
+
+        function showday(id) {
             id = id.split('k');
-            if ($("#weekday"+id[1]).css("display") == "flex") {
+            if ($("#weekday" + id[1]).css("display") == "flex") {
                 // post-box를 가리고
-                $("#weekday"+id[1]).hide();
+                $("#weekday" + id[1]).hide();
             } else {
                 // 아니면(눈에 보이지 않으면) post-box를 펴라
-                $("#weekday"+id[1]).show();
+                $("#weekday" + id[1]).show();
 
             }
         }
+
+        function modifyQA(qa_uid, question, answer, userkey_q, userkey_a, type) {
+            // let card_html=`
+            // <div class="card" style="width: 34rem;" data-index-number=${qa_uid}>
+            //     <div class="card-body">
+            //         <p>
+            //         <b><h5 class="card-text">${question}</h5></b>
+            //         <h6 class="card-subtitle mb-2 text-muted" >질문자 : ${userkey_q}</h6>
+            //         <button type="button" class="btn btn-primary btn-sm" button_number= q${qa_uid} onclick="modifyQA(${qa_uid}, ${question}, ${answer}, ${userkey_q}, ${userkey_a},'q')">수정</button>
+            //         <button type="button" class="btn btn-primary btn-sm">답글</button>
+            //         </p>
+            //         if (${answer}){
+            //         <p class="card-text">${answer}}
+            //         <h6 class="card-subtitle mb-2 text-muted">답변자 : ${userkey_a}</h6>
+            //         <button type="button" class="btn btn-primary btn-sm" button_number=" a${qa_uid}}" onclick="modifyQA(${qa_uid}, ${question}, ${answer}, ${userkey_q}, ${userkey_a}, 'a')">답글</button>
+            //         </p>
+            //         }
+            //     </div>
+            // </div>`
+            // $('#'${qa_uid}).html(temp_html);
+        }
+
     </script>
 </head>
 <body>
@@ -73,40 +94,31 @@
                 <div>Q&A</div>
             </div>
             <div class="content_contents">
-                <div class="qa_items">
-                    <div class="question">
-                        <div class="q_icon">Q.</div>
-                        <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
-                    </div>
-                    <div class="answer">
-                        <div class="a_icon">A.</div>
-                        <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
-                    </div>
-                    <div class="question">
-                        <div class="q_icon">Q.</div>
-                        <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
-                    </div>
-                    <div class="answer">
-                        <div class="a_icon">A.</div>
-                        <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
-                    </div>
-                    <div class="question">
-                        <div class="q_icon">Q.</div>
-                        <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
-                    </div>
-                    <div class="answer">
-                        <div class="a_icon">A.</div>
-                        <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
-                    </div>
-                    <div class="question">
-                        <div class="q_icon">Q.</div>
-                        <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
-                    </div>
-                    <div class="answer">
-                        <div class="a_icon">A.</div>
-                        <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
+
+                {% for qna in qnas %}
+                <div class="card" style="width: 34rem;" data-index-number={{qna['qa_uid']}}>
+                    <div class="card-body">
+                        <p>
+                            <b><h5 class="card-text">{{qna['question']}}</h5></b>
+                        <h6 class="card-subtitle mb-2 text-muted">질문자 : {{qna['userkey_q']}}</h6>
+                        <button type="button" class="btn btn-primary btn-sm" button_number=q{{qna['qa_uid']}}
+                                onclick="modifyQA('{{qna.qa_uid}}','{{qna.question}}','{{qna.answer}}','{{qna.userkey_q}}','{{qna.userkey_a}}', 'q')">
+                            수정
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm">답글</button>
+                        </p>
+                        {% if qna['answer'] %}
+                        <p class="card-text">{{qna['answer']}}
+                        <h6 class="card-subtitle mb-2 text-muted">답변자 : {{qna['userkey_a']}}</h6>
+                        <button type="button" class="btn btn-primary btn-sm" button_number=a{{qna['qa_uid']}}
+                                onclick="modifyQA('{{qna.qa_uid}}','{{qna.question}}','{{qna.answer}}','{{qna.userkey_q}}','{{qna.userkey_a}}', 'a')">
+                            답글
+                        </button>
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
         <div class="info">
@@ -211,10 +223,12 @@
         <div class="undefined">
             <div class="content_name">
                 <div>Develop History</div>
-                <button id="showDevelopHistorybutton" type="button" class="btn btn-light" onclick="showDevelopHistory()">show</button>
+                <button id="showDevelopHistorybutton" type="button" class="btn btn-light"
+                        onclick="showDevelopHistory()">show
+                </button>
             </div>
             <div class="content_contents">
-                <div id="develophistory"class="list-group"></div>
+                <div id="develophistory" class="list-group"></div>
             </div>
         </div>
     </div>

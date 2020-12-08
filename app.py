@@ -28,8 +28,9 @@ def home():
 
 @app.route('/main')
 def loadhome():
+    qnas = db.QandA.find({}, {'_id': False})
     if "username" in session:
-        return render_template('main.html')
+        return render_template('main.html', qnas=qnas)
     else:
         return render_template('login_page.html')
 
