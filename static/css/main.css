@@ -1,0 +1,182 @@
+.wrapper {
+    width: 100%;
+    height: 1000px;
+    background-color: #3A7734;
+}
+
+/*Header 파트*/
+
+.header {
+    height: 200px;
+    width: 100%;
+    background-color: #3B666B;
+}
+
+.header-logo {
+    height: 65%;
+    width: 100%;
+    background-color: #177199;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bolder;
+}
+
+.header-nav-bar {
+    height: 35%;
+    width: 100%;
+    background-color: #A5D6D9;
+    text-align: right;
+    font-size: 1.5em;
+    font-weight: bolder;
+}
+
+/* Contents Part*/
+
+.contents {
+    height: 700px;
+    width: 100%;
+    background-color: #9C1A1C;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.q_and_a {
+    height: 100%;
+    width: 33.3%;
+    background-color: #DDECEE;
+    display: flex;
+    flex-direction: column;
+}
+
+.info {
+    height: 100%;
+    width: 33.3%;
+    background-color: blue;
+}
+
+.undefined {
+    height: 100%;
+    width: 33.3%;
+    background-color: beige;
+}
+
+.content_name {
+    height: 15%;
+    width: 100%;
+    background-color: bisque;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bolder;
+}
+
+.content_contents {
+    width: 100%;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: scroll;
+}
+
+/*Q&A 파트*/
+.qa_items {
+    width: 98%;
+    height: 25%;
+    border: 1px solid black;
+}
+
+.question {
+    width: 100%;
+    height: 50%;
+    background-color: #30799B;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.answer {
+    width: 100%;
+    height: 50%;
+    background-color: #3A7734;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/*INFO part*/
+.info_items {
+    width: 98%;
+    height: fit-content;
+    background-color: blue;
+}
+
+.item_title {
+    height: 2.5em;
+    width: 100%;
+    background-color: white;
+}
+.writer_and_time{
+    height: 2em;
+    width: 100%;
+    background-color: #30799B;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.writer{
+    height: 100%;
+    width: 30%;
+    border: 1px solid black;
+}
+
+.write_time{
+    height: 100%;
+    width: 30%;
+    border: 1px solid black;
+}
+
+.item_contents {
+    height: fit-content;
+    width: 100%;
+    background-color: chartreuse;
+}
+
+.item_fav {
+    height: 2em;
+    width: 100%;
+    background-color: blueviolet;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.good_icon {
+    width: 10%;
+    height: 100%;
+    background-color: white;
+}
+
+.bad_icon {
+    width: 10%;
+    height: 100%;
+    background-color: black;
+}
+
+.view_counter {
+    width: 20%;
+    height: 100%;
+    text-align: center;
+}
+
+/*Footer part*/
+.footer {
+    height: 100px;
+    width: 100%;
+    background-color: brown;
+}
