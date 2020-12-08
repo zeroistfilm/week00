@@ -1,188 +1,228 @@
 <!DOCTYPE html>
 
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-              integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-              crossorigin="anonymous">
-        <link rel="stylesheet" href="../static/css/main.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-                crossorigin="anonymous">
-        </script>
-        <script>
-            function logout() {
-                window.location.href='http://localhost:5000/logout';
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+            crossorigin="anonymous">
+    </script>
+    <script>
+        function logout() {
+            window.location.href = 'http://54.180.91.148:5000/logout';
+        }
+        function showDevelopHistory(){
+
+
+
+            if ($('#develophistory').is(':empty')) {
+                console.log('sss')
+                let temphtml=``
+
+
+                $("#develophistory").append(temphtml);
+
             }
-        </script>
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="header">
-                <div class="header-logo">SW사관학교 정글</div>
-                <div class="header-nav-bar">
-                    <div class="login_status">교육생 조정훈</div>
-                    <div class="logout" style="cursor: pointer" onclick="logout()">로그아웃</div>
-                </div>
+
+
+
+
+            if ($("#develophistory").css("display") == "flex") {
+                // post-box를 가리고
+                $("#develophistory").hide();
+                $("#showDevelopHistorybutton").text("show");
+            } else {
+                // 아니면(눈에 보이지 않으면) post-box를 펴라
+                $("#develophistory").show();
+                $("#showDevelopHistorybutton").text("hide");
+
+            }
+
+        }
+        function showday(id){
+            id = id.split('k');
+            if ($("#weekday"+id[1]).css("display") == "flex") {
+                // post-box를 가리고
+                $("#weekday"+id[1]).hide();
+            } else {
+                // 아니면(눈에 보이지 않으면) post-box를 펴라
+                $("#weekday"+id[1]).show();
+
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header">
+        <div class="header-logo">SW사관학교 정글</div>
+        <div class="header-nav-bar">
+            <div class="login_status">교육생 조정훈</div>
+            <div class="logout" style="cursor: pointer" onclick="logout()">로그아웃</div>
+        </div>
+    </div>
+    <div class="contents">
+        <div class="q_and_a">
+            <div class="content_name">
+                <div>Q&A</div>
             </div>
-            <div class="contents">
-                <div class="q_and_a">
-                    <div class="content_name">
-                        <div>Q&A</div>
+            <div class="content_contents">
+                <div class="qa_items">
+                    <div class="question">
+                        <div class="q_icon">Q.</div>
+                        <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
                     </div>
-                    <div class="content_contents">
-                        <div class="qa_items">
-                            <div class="question">
-                                <div class="q_icon">Q.</div>
-                                <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
-                            </div>
-                            <div class="answer">
-                                <div class="a_icon">A.</div>
-                                <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
-                            </div>
-                            <div class="question">
-                                <div class="q_icon">Q.</div>
-                                <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
-                            </div>
-                            <div class="answer">
-                                <div class="a_icon">A.</div>
-                                <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
-                            </div>
-                            <div class="question">
-                                <div class="q_icon">Q.</div>
-                                <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
-                            </div>
-                            <div class="answer">
-                                <div class="a_icon">A.</div>
-                                <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
-                            </div>
-                            <div class="question">
-                                <div class="q_icon">Q.</div>
-                                <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
-                            </div>
-                            <div class="answer">
-                                <div class="a_icon">A.</div>
-                                <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
-                            </div>
-                        </div>
+                    <div class="answer">
+                        <div class="a_icon">A.</div>
+                        <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
                     </div>
-                </div>
-                <div class="info">
-                    <div class="content_name">
-                        <div>INFOMATION</div>
+                    <div class="question">
+                        <div class="q_icon">Q.</div>
+                        <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
                     </div>
-                    <div class="content_contents">
-                        <div class="info_items">
-                            <div class="item_title">제목입니다.</div>
-                            <div class="writer_and_time">
-                                <div class="writer">교육생 조정훈</div>
-                                <div class="write_time">2020.12.08 14:23</div>
-                            </div>
-                            <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
-                            <div class="item_fav">
-                                <div class="good_icon"></div>
-                                <div class="bad_icon"></div>
-                                <div class="view_counter">조회수 10</div>
-                            </div>
-                        </div>
-                        <div class="info_items">
-                            <div class="item_title">제목입니다.</div>
-                            <div class="writer_and_time">
-                                <div class="writer">교육생 조정훈</div>
-                                <div class="write_time">2020.12.08 14:23</div>
-                            </div>
-                            <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
-                            <div class="item_fav">
-                                <div class="good_icon"></div>
-                                <div class="bad_icon"></div>
-                                <div class="view_counter">조회수 10</div>
-                            </div>
-                        </div>
-                        <div class="info_items">
-                            <div class="item_title">제목입니다.</div>
-                            <div class="writer_and_time">
-                                <div class="writer">교육생 조정훈</div>
-                                <div class="write_time">2020.12.08 14:23</div>
-                            </div>
-                            <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
-                            <div class="item_fav">
-                                <div class="good_icon"></div>
-                                <div class="bad_icon"></div>
-                                <div class="view_counter">조회수 10</div>
-                            </div>
-                        </div>
-                        <div class="info_items">
-                            <div class="item_title">제목입니다.</div>
-                            <div class="writer_and_time">
-                                <div class="writer">교육생 조정훈</div>
-                                <div class="write_time">2020.12.08 14:23</div>
-                            </div>
-                            <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
-                            <div class="item_fav">
-                                <div class="good_icon"></div>
-                                <div class="bad_icon"></div>
-                                <div class="view_counter">조회수 10</div>
-                            </div>
-                        </div>
-                        <div class="info_items">
-                            <div class="item_title">제목입니다.</div>
-                            <div class="writer_and_time">
-                                <div class="writer">교육생 조정훈</div>
-                                <div class="write_time">2020.12.08 14:23</div>
-                            </div>
-                            <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
-                            <div class="item_fav">
-                                <div class="good_icon"></div>
-                                <div class="bad_icon"></div>
-                                <div class="view_counter">조회수 10</div>
-                            </div>
-                        </div>
-                        <div class="info_items">
-                            <div class="item_title">제목입니다.</div>
-                            <div class="writer_and_time">
-                                <div class="writer">교육생 조정훈</div>
-                                <div class="write_time">2020.12.08 14:23</div>
-                            </div>
-                            <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
-                            <div class="item_fav">
-                                <div class="good_icon"></div>
-                                <div class="bad_icon"></div>
-                                <div class="view_counter">조회수 10</div>
-                            </div>
-                        </div>
-                        <div class="info_items">
-                            <div class="item_title">제목입니다.</div>
-                            <div class="writer_and_time">
-                                <div class="writer">교육생 조정훈</div>
-                                <div class="write_time">2020.12.08 14:23</div>
-                            </div>
-                            <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
-                            <div class="item_fav">
-                                <div class="good_icon"></div>
-                                <div class="bad_icon"></div>
-                                <div class="view_counter">조회수 10</div>
-                            </div>
-                        </div>
-
+                    <div class="answer">
+                        <div class="a_icon">A.</div>
+                        <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
                     </div>
-                </div>
-                <div class="undefined">
-                    <div class="content_name">
-                        <div>UNDEFINED</div>
+                    <div class="question">
+                        <div class="q_icon">Q.</div>
+                        <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
                     </div>
-                    <div class="content_contents">
-
+                    <div class="answer">
+                        <div class="a_icon">A.</div>
+                        <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
+                    </div>
+                    <div class="question">
+                        <div class="q_icon">Q.</div>
+                        <div class="q_text">나라말싸미듕귁에달아젼차와로나맛디아니핤</div>
+                    </div>
+                    <div class="answer">
+                        <div class="a_icon">A.</div>
+                        <div class="a_text">가나다라마바사아자차카타파하ABCDEFGHIJ</div>
                     </div>
                 </div>
             </div>
-            <div class="footer"></div>
         </div>
+        <div class="info">
+            <div class="content_name">
+                <div>INFOMATION</div>
+            </div>
+            <div class="content_contents">
+                <div class="info_items">
+                    <div class="item_title">제목입니다.</div>
+                    <div class="writer_and_time">
+                        <div class="writer">교육생 조정훈</div>
+                        <div class="write_time">2020.12.08 14:23</div>
+                    </div>
+                    <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
+                    <div class="item_fav">
+                        <div class="good_icon"></div>
+                        <div class="bad_icon"></div>
+                        <div class="view_counter">조회수 10</div>
+                    </div>
+                </div>
+                <div class="info_items">
+                    <div class="item_title">제목입니다.</div>
+                    <div class="writer_and_time">
+                        <div class="writer">교육생 조정훈</div>
+                        <div class="write_time">2020.12.08 14:23</div>
+                    </div>
+                    <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
+                    <div class="item_fav">
+                        <div class="good_icon"></div>
+                        <div class="bad_icon"></div>
+                        <div class="view_counter">조회수 10</div>
+                    </div>
+                </div>
+                <div class="info_items">
+                    <div class="item_title">제목입니다.</div>
+                    <div class="writer_and_time">
+                        <div class="writer">교육생 조정훈</div>
+                        <div class="write_time">2020.12.08 14:23</div>
+                    </div>
+                    <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
+                    <div class="item_fav">
+                        <div class="good_icon"></div>
+                        <div class="bad_icon"></div>
+                        <div class="view_counter">조회수 10</div>
+                    </div>
+                </div>
+                <div class="info_items">
+                    <div class="item_title">제목입니다.</div>
+                    <div class="writer_and_time">
+                        <div class="writer">교육생 조정훈</div>
+                        <div class="write_time">2020.12.08 14:23</div>
+                    </div>
+                    <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
+                    <div class="item_fav">
+                        <div class="good_icon"></div>
+                        <div class="bad_icon"></div>
+                        <div class="view_counter">조회수 10</div>
+                    </div>
+                </div>
+                <div class="info_items">
+                    <div class="item_title">제목입니다.</div>
+                    <div class="writer_and_time">
+                        <div class="writer">교육생 조정훈</div>
+                        <div class="write_time">2020.12.08 14:23</div>
+                    </div>
+                    <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
+                    <div class="item_fav">
+                        <div class="good_icon"></div>
+                        <div class="bad_icon"></div>
+                        <div class="view_counter">조회수 10</div>
+                    </div>
+                </div>
+                <div class="info_items">
+                    <div class="item_title">제목입니다.</div>
+                    <div class="writer_and_time">
+                        <div class="writer">교육생 조정훈</div>
+                        <div class="write_time">2020.12.08 14:23</div>
+                    </div>
+                    <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
+                    <div class="item_fav">
+                        <div class="good_icon"></div>
+                        <div class="bad_icon"></div>
+                        <div class="view_counter">조회수 10</div>
+                    </div>
+                </div>
+                <div class="info_items">
+                    <div class="item_title">제목입니다.</div>
+                    <div class="writer_and_time">
+                        <div class="writer">교육생 조정훈</div>
+                        <div class="write_time">2020.12.08 14:23</div>
+                    </div>
+                    <div class="item_contents">내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다내용입니다</div>
+                    <div class="item_fav">
+                        <div class="good_icon"></div>
+                        <div class="bad_icon"></div>
+                        <div class="view_counter">조회수 10</div>
+                    </div>
+                </div>
 
+            </div>
         </div>
-    </body>
+        <div class="undefined">
+            <div class="content_name">
+                <div>Develop History</div>
+                <button id="showDevelopHistorybutton" type="button" class="btn btn-light" onclick="showDevelopHistory()">show</button>
+            </div>
+            <div class="content_contents">
+                <div id="develophistory"class="list-group"></div>
+            </div>
+        </div>
+    </div>
+    <div class="footer"></div>
+</div>
+
+</div>
+</body>
 
 <html lang="en">
 <head>
@@ -192,5 +232,5 @@
 <body>
 
 </body>
->>>>>>> d105a6ceb5cdf7274ebe7d170015548a3b7d1ef7
+
 </html>
