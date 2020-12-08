@@ -1,4 +1,7 @@
-from flask import Flask, render_template, jsonify, request, session, escape, redirect
+from datetime import timedelta
+
+import flask
+from flask import Flask, render_template, jsonify, request, session, escape, redirect, flash, url_for
 from pymongo import MongoClient  # pymongo를 임포트 하기(패키지 인스톨 먼저 해야겠죠?)
 
 app = Flask(__name__)
@@ -10,6 +13,11 @@ db = client.jungglebook
 app.secret_key = b"!@#$1234"
 
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=5)
+
 @app.route('/')
 def home():
     if "username" in session:
@@ -17,9 +25,10 @@ def home():
     else:
         return render_template('login_page.html')
 
+
 @app.route('/main')
 def loadhome():
-    if session:
+    if "username" in session:
         return render_template('main.html')
     else:
         return render_template('login_page.html')
@@ -71,9 +80,11 @@ def session_test():
             return jsonify({"result": "일치하는 유저가 없습니다."})
 
 
-@app.route('/main', methods=['POST'])
-def checkUser():
-    result = list(db.userDB.find({}, {'_id': 0}))
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    print('로그아웃 되었습니다.')
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
