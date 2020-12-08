@@ -20,7 +20,11 @@ def home():
 
 @app.route('/main')
 def loadhome():
-    return render_template('main.html')
+
+    if session:
+        return render_template('main.html')
+    else:
+        return render_template('login_page.html')
 
 @app.route('/signup', methods=['POST'])
 def signUp():
@@ -60,18 +64,14 @@ def session_test():
             if "username" in session:
                 print("유지중")
                 result = escape(session['username'])
-
-                return render_template('main.html')
-
-
-
+                return jsonify({"result":"success"})
 
             else:
                 print("세션없음")
                 session['username'] = user_id
                 result = escape(session['username'])
 
-                # return jsonify({"result":"Fail"})
+                return jsonify({"result":"Fail"})
 
 
 
