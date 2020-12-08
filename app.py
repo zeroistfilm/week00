@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, session, escape
+from flask import Flask, render_template, jsonify, request, session, escape,redirect
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient  # pymongo를 임포트 하기(패키지 인스톨 먼저 해야겠죠?)
@@ -20,7 +20,7 @@ def home():
 
 @app.route('/main')
 def loadhome():
-    return render_template('login_page.html')
+    return render_template('main.html')
 
 @app.route('/signup', methods=['POST'])
 def signUp():
@@ -51,18 +51,31 @@ def session_test():
         user_id = request.form['id_give']
         user_password = request.form['password_give']
 
-        user = db.userDB.find_one({'id': user_id, 'password': user_password})
+        user = db.userDB.find_one({'id': str(user_id), 'password': str(user_password)})
+
+
+
         if user:
 
             if "username" in session:
                 print("유지중")
                 result = escape(session['username'])
+
+                return render_template('main.html')
+
+
+
+
             else:
                 print("세션없음")
-                session['username'] = request.form['name']
+                session['username'] = user_id
                 result = escape(session['username'])
 
-            return render_template("main.html")
+                # return jsonify({"result":"Fail"})
+
+
+
+
 
         else:
 
