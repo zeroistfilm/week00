@@ -236,39 +236,76 @@ def make_session_permanent():
 # ----------------------------JH-----------------------------------
 # ----------------------------JH-----------------------------------
 
-# ----------------------------YD-----------------------------------
-# ----------------------------YD-----------------------------------
-# ----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+
 
 
 @app.route('/develophistory', methods=['POST'])
 def post_develophistory():
+
     title_receive = request.form['title_give']  # 클라이언트로부터 url을 받는 부분
     contents_receive = request.form['contents_give']  # 클라이언트로부터
     id_receive = request.form['id_give']  #
-    userKey = session['userkey']
+    userKey=session['userkey']
 
     history = {'id': id_receive, 'title': title_receive, 'contents': contents_receive, 'userkey': userKey}
     db.history.insert_one(history)
 
+
     return jsonify({'result': 'success'})
+
 
 
 @app.route('/develophistory', methods=['GET'])
 def read_develophistory():
-    # 1. mongoDB에서 _id 값을 제외한 모든 데이터 조회해오기 (Read)
-    # user = db.userDB.find_one({'key': str(key)})
 
-    historys = list(db.history.find({}, {'_id': 0}))
-    userKey = session['userkey']
+    keyparm = request.args.get("key")
+    if keyparm:
+        userKey=keyparm
+    else:
+        userKey = session['userkey']
 
-    print(historys)
-    # 2. articles라는 키 값으로 article 정보 보내주기
+    historys = list(db.history.find({'userkey': userKey},{"_id": False}))
+
+
+
+
     return jsonify({'result': 'success', 'historys': historys})
 
 
-# ----------------------------YD-----------------------------------
-# ----------------------------YD-----------------------------------
-# ----------------------------YD-----------------------------------
+@app.route('/develophistory/edit', methods=['POST'])
+def edit_develophistory():
+
+    title_receive = request.form['title_give']  # 클라이언트로부터 url을 받는 부분
+    contents_receive = request.form['contents_give']  # 클라이언트로부터
+    id_receive = request.form['id_give']  #
+
+    userKey=session['userkey']
+
+    db.history.remove({'id': id_receive})
+    history = {'id': id_receive, 'title': title_receive, 'contents': contents_receive, 'userkey': userKey}
+    db.history.insert_one(history)
+
+
+    return jsonify({'result': 'success'})
+
+@app.route('/develophistory/delete', methods=['POST'])
+def delete_develophistory():
+
+    id_receive = request.form['id_give']  #
+    userKey=session['userkey']
+    db.history.remove({'id': id_receive})
+
+
+
+    return jsonify({'result': 'success'})
+
+
+#----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

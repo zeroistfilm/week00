@@ -81,68 +81,266 @@
         // --------------------------------JH------------------------------------
         // --------------------------------JH------------------------------------
 
-        // --------------------------------YD------------------------------------
+     // --------------------------------YD------------------------------------
         // --------------------------------YD------------------------------------
         // --------------------------------YD------------------------------------
 
-        function developHistoryPut(id) {
+
+        function developHistoryPut(id,parentsid) {
             console.log(id)
-            let weekid = id.slice(3, 5);
-            console.log(weekid)
+            console.log($("#workhistory" + id).css("display"))
+             $("#workhistorymon" + id.slice(3,5)).hide();
+             $("#workhistorytue" + id.slice(3,5)).hide();
+             $("#workhistorywed" + id.slice(3,5)).hide();
+             $("#workhistorythu" + id.slice(3,5)).hide();
+             $("#workhistoryfri" + id.slice(3,5)).hide();
+             $("#workhistorysat" + id.slice(3,5)).hide();
+             $("#workhistorysun" + id.slice(3,5)).hide();
 
-            if ($('#develophistory').is(':empty')) {
-                let temphtml = `<div class="mb-3">
-                              <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-                            </div>
-                            <div class="mb-3">
-                              <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-                              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                          </div>`
-                $("#week" + weekid).append(temphtml);
+            if ($("#workhistory" + id).css("display") == "none") {
+                $("#workhistory" + id).show();
+            } else {
+                $("#workhistory" + id).hide();
             }
-
-            // if ($("#develophistory").css("display") == "flex") {
-            //     // post-box를 가리고
-            //     $("#develophistory").hide();
-            //     $("#showDevelopHistorybutton").text("show");
-            // } else {
-            //     // 아니면(눈에 보이지 않으면) post-box를 펴라
-            //     $("#develophistory").show();
-            //     $("#showDevelopHistorybutton").text("hide");
-            //
-            // }
         }
 
-        function showDevelopHistory() {
-            // if ($('#develophistory').is(':empty')) {
-            let temphtml = ``
-            let tempid = 0
-            for (let i = 1; i < 19; i++) {
-                temphtml += `<a id="week${i}" href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
-                                <ul style="width:100%"   id="weekday${i}"class="list-group list-group-horizontal">
-                                          <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">목</li>
-                                          <li id="fri${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">금</li>
-                                          <li id="sat${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">토</li>
-                                          <li id="sun${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">일</li>
-                                          <li id="mon${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">월</li>
-                                          <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">화</li>
-                                          <li id="wed${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">수</li>
-                                </ul>
-                                <ur id="workhistory${i}"></ur>`
-            }
-            $("#develophistory").append(temphtml);
-            // }
+        function insertcontents(id){
+            id=id.slice(11,16)
 
-            // if ($("#develophistory").css("display") == "flex") {
-            //     // post-box를 가리고
-            //     $("#develophistory").hide();
-            //     $("#showDevelopHistorybutton").text("show");
-            // } else {
-            //     // 아니면(눈에 보이지 않으면) post-box를 펴라
-            //     $("#develophistory").show();
-            //     $("#showDevelopHistorybutton").text("hide");
-            // }
+            let title = $("#title"+id).val();
+            let contents = $("#contents"+id).val();
+            // // 2. memo에 POST 방식으로 메모 생성 요청하기
+            $.ajax({
+                type: "POST", // POST 방식으로 요청하겠다.
+                url: "/develophistory", // /memo라는 url에 요청하겠다.
+                data: {title_give: title, contents_give: contents, id_give:id}, // 데이터를 주는 방법
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("포스팅 성공!");
+                        // 3. 성공 시 페이지 새로고침하기
+                        window.location.reload();
+                    } else {
+                        alert("서버 오류!")
+                    }
+                }
+            })
+        }
+
+        function editcontents(id){
+            id=id.slice(11,16)
+
+            let title = $("#title"+id).val();
+            let contents = $("#contents"+id).val();
+            // // 2. memo에 POST 방식으로 메모 생성 요청하기
+            $.ajax({
+                type: "POST", // POST 방식으로 요청하겠다.
+                url: "/develophistory/edit", // /memo라는 url에 요청하겠다.
+                data: {title_give: title, contents_give: contents, id_give:id}, // 데이터를 주는 방법
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("포스팅 성공!");
+                        // 3. 성공 시 페이지 새로고침하기
+                        window.location.reload();
+                    } else {
+                        alert("서버 오류!")
+                    }
+                }
+            })
+        }
+
+        function deletecontents(id) {
+            id = id.slice(11, 16)
+
+            let title = $("#title" + id).val();
+            let contents = $("#contents" + id).val();
+            // // 2. memo에 POST 방식으로 메모 생성 요청하기
+            $.ajax({
+                type: "POST", // POST 방식으로 요청하겠다.
+                url: "/develophistory/delete", // /memo라는 url에 요청하겠다.
+                data: {id_give: id}, // 데이터를 주는 방법
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("포스팅 성공!");
+                        // 3. 성공 시 페이지 새로고침하기
+                        window.location.reload();
+                    } else {
+                        alert("서버 오류!")
+                    }
+                }
+            })
+        }
+
+        function showDevelopHistory(key) {
+
+            $("#develophistory").empty();
+            let path =null
+            if(key=="init"){
+                path ="/develophistory"
+            }else {
+                path="/develophistory?key="+key
+            }
+
+
+            $.ajax({
+                type: "GET", // POST 방식으로 요청하겠다.
+                url: path, // /memo라는 url에 요청하겠다.
+                data: {}, // 데이터를 주는 방법
+                success: function (response) {
+
+
+                    let historys = response["historys"];
+                    console.log(historys)
+
+
+                    let temphtml = ``
+                    let tempid = 0
+
+                    for (let i = 1; i < 19; i++) {
+
+
+                        temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
+                        <ul  style="display:none;"  id="weekday${i}"class="list-group list-group-horizontal">
+                              <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">목</li>
+                              <li id="fri${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">금</li>
+                              <li id="sat${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">토</li>
+                              <li id="sun${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">일</li>
+                              <li id="mon${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">월</li>
+                              <li id="tue${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">화</li>
+                              <li id="wed${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">수</li>
+                        </ul>
+                            <ur id="workhistorythu${i}" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">thu title</label>
+                                    <textarea id="titlethu${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                </div>
+                                <div class="mbz-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <textarea id="contentsthu${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <button id="insertthu${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
+                                <button id="editthu${i}" style="display: none" type="button" class="btn btn-outline-success" onclick="editcontents(this.parentNode.id)">수정</button>
+                                <button id="deletethu${i}" style="display: none" type="button" class="btn btn-outline-secondary" onclick="deletecontents(this.parentNode.id)" >삭제</button>
+                            </ur>
+
+
+                            <ur id="workhistoryfri${i}" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">fri title</label>
+                                    <textarea id="titlefri${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                </div>
+                                <div class="mbz-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <textarea id="contentsfri${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <button id="insertfri${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
+                                <button id="editfri${i}" style="display: none" type="button" class="btn btn-outline-success" onclick="editcontents(this.parentNode.id)">수정</button>
+                                <button id="deletefri${i}" style="display: none" type="button" class="btn btn-outline-secondary" onclick="deletecontents(this.parentNode.id)" >삭제</button>
+                            </ur>
+                            <ur id="workhistorysat${i}" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">sat title</label>
+                                    <textarea id="titlesat${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                </div>
+                                <div class="mbz-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <textarea id="contentssat${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <button id="insertsat${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
+                                <button id="editsat${i}" style="display: none" type="button" class="btn btn-outline-success" onclick="editcontents(this.parentNode.id)">수정</button>
+                                <button id="deletesat${i}" style="display: none" type="button" class="btn btn-outline-secondary" onclick="deletecontents(this.parentNode.id)" >삭제</button>
+                            </ur>
+                            <ur id="workhistorysun${i}" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">sun title</label>
+                                    <textarea id="titlesun${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                </div>
+                                <div class="mbz-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <textarea id="contentssun${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <button id="insertsun${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
+                                <button id="editsun${i}" style="display: none" type="button" class="btn btn-outline-success" onclick="editcontents(this.parentNode.id)">수정</button>
+                                <button id="deletesun${i}" style="display: none" type="button" class="btn btn-outline-secondary" onclick="deletecontents(this.parentNode.id)" >삭제</button>
+                            </ur>
+                            <ur id="workhistorymon${i}" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">mon title</label>
+                                    <textarea id="titlemon${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                </div>
+                                <div class="mbz-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <textarea id="contentsmon${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <button id="insertmon${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
+                                <button id="editmon${i}" style="display: none" type="button" class="btn btn-outline-success" onclick="editcontents(this.parentNode.id)">수정</button>
+                                <button id="deletemon${i}" style="display: none" type="button" class="btn btn-outline-secondary" onclick="deletecontents(this.parentNode.id)" >삭제</button>
+                            </ur>
+                            <ur id="workhistorytue${i}" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">tue title</label>
+                                    <textarea id="titletue${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                </div>
+                                <div class="mbz-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <textarea id="contentstue${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <button id="inserttue${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
+                                <button id="edittue${i}" style="display: none" type="button" class="btn btn-outline-success" onclick="editcontents(this.parentNode.id)">수정</button>
+                                <button id="deletetue${i}" style="display: none" type="button" class="btn btn-outline-secondary" onclick="deletecontents(this.parentNode.id)" >삭제</button>
+                            </ur>
+                            <ur id="workhistorywed${i}" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">wed title</label>
+                                    <textarea id="titlewed${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                </div>
+                                <div class="mbz-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <textarea id="contentswed${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <button id="insertwed${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
+                                <button id="editwed${i}" style="display: none" type="button" class="btn btn-outline-success" onclick="editcontents(this.parentNode.id)">수정</button>
+                                <button id="deletewed${i}" style="display: none" type="button" class="btn btn-outline-secondary" onclick="deletecontents(this.parentNode.id)" >삭제</button>
+                            </ur>
+
+                        `
+                    }
+
+                    $("#develophistory").append(temphtml);
+
+                    for (let i = 0; i < historys.length; i++) {
+
+                        let week = historys[i]['id']
+                        let title = historys[i]['title']
+                        let contents = historys[i]['contents']
+
+
+                        for (let j =1; j<19;j++){
+                            if(week.slice(3,5)==j){
+
+                                $("#title"+week.slice(0,3)+j).val(title)
+                                $("#contents"+week.slice(0,3)+j).val(contents)
+                                $("#insert"+week.slice(0,3)+j).hide();
+                                $("#edit"+week.slice(0,3)+j).show();
+                                $("#delete"+week.slice(0,3)+j).show();
+
+                                $("#"+week.slice(0,3)+j).css("background-color","#FDF5E6")
+                                $("#week"+j).css("background-color","#B0E0E6")
+
+
+
+                            }
+                        }
+
+
+                        // if id.slice(0,3)=="mon"(
+                        //
+                        // )
+                        // $("#post-url").val()
+                    }
+
+                }
+            })
+
         }
 
         function showday(id) {
@@ -150,16 +348,24 @@
             if ($("#weekday" + id[1]).css("display") == "flex") {
                 // post-box를 가리고
                 $("#weekday" + id[1]).hide();
+                $("#workhistorythu" + id[1]).hide();
+                $("#workhistoryfri" + id[1]).hide();
+                $("#workhistorysat" + id[1]).hide();
+                $("#workhistorysun" + id[1]).hide();
+                $("#workhistorymon" + id[1]).hide();
+                $("#workhistorytue" + id[1]).hide();
+                $("#workhistorywed" + id[1]).hide();
             } else {
                 // 아니면(눈에 보이지 않으면) post-box를 펴라
                 $("#weekday" + id[1]).show();
             }
+
+
         }
 
         // --------------------------------YD------------------------------------
         // --------------------------------YD------------------------------------
         // --------------------------------YD------------------------------------
-
 
         // --------------------------------SH------------------------------------
         // --------------------------------SH------------------------------------
@@ -530,7 +736,7 @@
     </div>
 </div>
 <script>
-    showDevelopHistory();
+    showDevelopHistory('init');
     init();
 </script>
 </body>
