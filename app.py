@@ -25,23 +25,21 @@ def home():
     else:
         return render_template('login_page.html')
 
+#----------------------------SH-----------------------------------
+#----------------------------SH-----------------------------------
+#----------------------------SH-----------------------------------
 
-@app.route('/main')
-def loadhome():
-    qnas = db.QandA.find({}, {'_id': False})
-    if "username" in session:
-        return render_template('main.html', qnas=qnas)
-    else:
-        return render_template('login_page.html')
-
-@app.route('/qna/add')
+@app.route('/qna/add', methods=['POST'])
 def addQNA():
     content_receive = request.form['content_give']
     type_receive = request.form['type_give']
 
+
     if type_receive=='q':
-        
+        db.QandA.insert_one({'qa_uid': str(id_receive)})
+
         return jsonify({"result": "success"})
+
 @app.route('/qna/modify')
 def modifyQNA():
     qnas = db.QandA.find({}, {'_id': False})
@@ -59,6 +57,19 @@ def deleteQNA():
         db.QandA.update_one({'qa_uid': str(id_receive)}, {'$set': {'answer':'','userkey_a':''}})
 
     return jsonify({"result": "success"})
+
+#----------------------------SH-----------------------------------
+#----------------------------SH-----------------------------------
+#----------------------------SH-----------------------------------
+
+@app.route('/main')
+def loadhome():
+    qnas = db.QandA.find({}, {'_id': False})
+    if "username" in session:
+        return render_template('main.html', qnas=qnas)
+    else:
+        return render_template('login_page.html')
+
 @app.route('/signup', methods=['POST'])
 def signUp():
     # id_receive = request.form['id']  # 클라이언트로부터 id을 받는 부분

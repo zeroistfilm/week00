@@ -15,7 +15,7 @@
     </script>
     <script>
         function logout() {
-            window.location.href = 'http://54.180.91.148:5000/logout';
+            window.location.href = 'http://localhost:5000/logout';
         }
 
 
@@ -98,28 +98,108 @@
 
             }
         }
+// --------------------------------SH------------------------------------
+// --------------------------------SH------------------------------------
+// --------------------------------SH------------------------------------
 
-        function modifyQA(qa_uid, question, answer, userkey_q, userkey_a, type) {
-            // let card_html=`
-            // <div class="card" style="width: 34rem;" data-index-number=${qa_uid}>
-            //     <div class="card-body">
-            //         <p>
-            //         <b><h5 class="card-text">${question}</h5></b>
-            //         <h6 class="card-subtitle mb-2 text-muted" >질문자 : ${userkey_q}</h6>
-            //         <button type="button" class="btn btn-primary btn-sm" button_number= q${qa_uid} onclick="modifyQA(${qa_uid}, ${question}, ${answer}, ${userkey_q}, ${userkey_a},'q')">수정</button>
-            //         <button type="button" class="btn btn-primary btn-sm">답글</button>
-            //         </p>
-            //         if (${answer}){
-            //         <p class="card-text">${answer}}
-            //         <h6 class="card-subtitle mb-2 text-muted">답변자 : ${userkey_a}</h6>
-            //         <button type="button" class="btn btn-primary btn-sm" button_number=" a${qa_uid}}" onclick="modifyQA(${qa_uid}, ${question}, ${answer}, ${userkey_q}, ${userkey_a}, 'a')">답글</button>
-            //         </p>
-            //         }
-            //     </div>
-            // </div>`
-            // $('#'${qa_uid}).html(temp_html);
+        function addQA() {
+
+            console.log('add clicked')
+            console.log($("#qadd").css("display"))
+            if($("#qadd").css("display")=='none'){
+               $(`#qadd`).show();
+            }
+            else{
+                $(`#qadd`).hide();
+            }
+
         }
 
+        function addQARequest(qa_uid, type) {
+
+
+            text = $(`addquestiontext`).val();
+            console.log(text, type)
+
+            $.ajax({
+                type: "POST",
+                url: `/qna/add`,
+                data: {'content_give': text, 'type_give': type},
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("등록 성공");
+                        window.location.reload();
+                    } else {
+                        alert("오류 발생");
+                    }
+                }
+            })
+        }
+
+        function deleteQARequest(qa_uid, type) {
+            console.log(qa_uid)
+            console.log(type)
+            $.ajax({
+                type: "POST",
+                url: `/qna/delete`,
+                data: {'id_give': qa_uid, 'type_give': type},
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("삭제 성공");
+                        window.location.reload();
+                    } else {
+                        alert("오류 발생");
+                    }
+                }
+            })
+        }
+
+        function modifyQARequest(qa_uid) {
+            console.log(qa_uid)
+            let question = $('#' + 'mq' + qa_uid).val();
+            console.log(question)
+            $.ajax({
+                type: "POST",
+                url: `/qna/modify`,
+                data: {'id_give': qa_uid, 'question_give': question},
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("수정 성공");
+                        window.location.reload();
+                    } else {
+                        alert("오류 발생");
+                    }
+                }
+            })
+        }
+
+        function modifyQA(qa_uid, question, answer, userkey_q, userkey_a, type) {
+
+            if (type == 'q') {
+                console.log('q')
+                let card_html = `
+             <div class="card" style="width: 34rem;" id=${qa_uid}>
+                 <div class="card-body">
+                     <p>
+                     <input id="mq${qa_uid}" class="form-control", value="${question}"></input>
+                     <h6 class="card-subtitle mb-2 text-muted">${userkey_q}</h6>
+                     <button type="button" class="btn btn-primary btn-sm" button_number=q${qa_uid} onclick="modifyQARequest('${qa_uid}')">완료</button>
+                     <button type="button" class="btn btn-primary btn-sm">취소</button>
+                     </p>
+                     <p class="card-text">${answer}
+                     <h6 class="card-subtitle mb-2 text-muted">${userkey_a}</h6>
+                     </p>
+                 </div>
+             </div>`
+                console.log('#' + qa_uid)
+                $('#' + qa_uid).html(card_html);
+            } else {
+
+            }
+        }
+// --------------------------------SH------------------------------------
+// --------------------------------SH------------------------------------
+// --------------------------------SH------------------------------------
     </script>
 </head>
 <body>
@@ -132,14 +212,34 @@
         </div>
     </div>
     <div class="contents">
+    <!---------------SH------------------->
+    <!---------------SH------------------->
+    <!---------------SH------------------->
         <div class="q_and_a">
-            <div class="content_name">
-                <div>Q&A</div>
+            <div>Q&A</div><br>
+            <button type="button" class="btn btn-primary btn-sm" id="addqbutton"}
+                                onclick="addQA()">
+                            질문하기
+                        </button>
+            <div class="content_name" id="qadd" style="display: none">
+                <form>
+                    <div class="form-group">
+                        <textarea class="form-control" id="addquestiontext" rows="2"></textarea>
+                        <button type="button" class="btn btn-primary btn-sm" id="addq"}
+                                onclick="addQARequest('q')">
+                            완료
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" id="canq"}
+                                onclick="cancelQA('q')">
+                            취소
+                        </button>
+                    </div>
+                </form>
             </div>
             <div class="content_contents">
 
                 {% for qna in qnas %}
-                <div class="card" style="width: 34rem;" data-index-number={{qna['qa_uid']}}>
+                <div class="card" style="width: 100%;" id={{qna['qa_uid']}}>
                     <div class="card-body">
                         <p>
                             <b><h5 class="card-text">{{qna['question']}}</h5></b>
@@ -149,13 +249,25 @@
                             수정
                         </button>
                         <button type="button" class="btn btn-primary btn-sm">답글</button>
+                        <button type="button" class="btn btn-primary btn-sm" button_number=dq{{qna['qa_uid']}}
+                                onclick="deleteQARequest('{{qna.qa_uid}}','q')">
+                            삭제
+                        </button>
                         </p>
                         {% if qna['answer'] %}
                         <p class="card-text">{{qna['answer']}}
                         <h6 class="card-subtitle mb-2 text-muted">답변자 : {{qna['userkey_a']}}</h6>
                         <button type="button" class="btn btn-primary btn-sm" button_number=a{{qna['qa_uid']}}
-                                onclick="modifyQA('{{qna.qa_uid}}','{{qna.question}}','{{qna.answer}}','{{qna.userkey_q}}','{{qna.userkey_a}}', 'a')">
+                                onclick="modifyQA('{{qna.qa_uid}}','','{{qna.answer}}','','{{qna.userkey_a}}', 'a')">
+                            수정
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" button_number=a{{qna['qa_uid']}}
+                                onclick="addQARequest('{{qna.qa_uid}}','{{qna.question}}','{{qna.answer}}','{{qna.userkey_q}}','{{qna.userkey_a}}', 'a')">
                             답글
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" button_number=da{{qna['qa_uid']}}
+                                onclick="deleteQARequest('{{qna.qa_uid}}','a')">
+                            삭제
                         </button>
                         </p>
                         {% endif %}
@@ -164,6 +276,10 @@
                 {% endfor %}
             </div>
         </div>
+        <!---------------SH------------------->
+        <!---------------SH------------------->
+        <!---------------SH------------------->
+
         <div class="info">
             <div class="content_name">
                 <div>INFOMATION</div>
