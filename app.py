@@ -22,16 +22,46 @@ app.secret_key = b"!@#$1234"
 def addQNA():
     content_receive = request.form['content_give']
     type_receive = request.form['type_give']
+    user_key = session['userkey']
+    user = db.userDB.find_one({'key': str(user_key)})
 
     if type_receive == 'q':
-        db.QandA.insert_one({'qa_uid': str(id_receive)})
+        qnas = list(db.QandA.find({}, {'_id': False}))
+        if (len(qnas)):
+            last_qna = qnas[-1]['qa_uid']
+            qa_uid = 'qa' + str(int(last_qna[2:]) + 1)
+            print(last_qna, qa_uid)
+            db.QandA.insert_one({'qa_uid': qa_uid, 'question': content_receive, 'userkey_q': user_key})
+        else:
+            db.QandA.insert_one({'qa_uid': 'qa0', 'question': content_receive, 'userkey_q': user_key})
+    else:
+        if (user['usertype'] == '2'):
+            id_receive = request.form['id_give']
+            db.QandA.update_one({'qa_uid': id_receive}, {'$set': {'answer': content_receive, 'userkey_a': user_key}})
+        else:
+            return jsonify({"result": "운영진이 아닙니다."})
+    return jsonify({"result": "success"})
 
-        return jsonify({"result": "success"})
 
-
-@app.route('/qna/modify')
+@app.route('/qna/modify', methods=['POST'])
 def modifyQNA():
-    qnas = db.QandA.find({}, {'_id': False})
+    content_receive = request.form['content_give']
+    type_receive = request.form['type_give']
+    id_receive = request.form['id_give']
+    user_key = session['userkey']
+    user = db.userDB.find_one({'key': str(user_key)})
+    qna = db.QandA.find_one({'qa_uid': str(id_receive)})
+    if type_receive == 'q':
+        if (qna['userkey_q'] == str(user_key)):
+            db.QandA.update_one({'qa_uid': id_receive}, {'$set': {'question': content_receive}})
+        else:
+            return jsonify({"result": "작성자만 글을 수정할 수 있습니다."})
+    else:
+        if (user['usertype'] == '2'):
+            db.QandA.update_one({'qa_uid': id_receive}, {'$set': {'answer': content_receive}})
+        else:
+            return jsonify({"result": "운영진이 아닙니다."})
+    return jsonify({"result": "success"})
 
 
 @app.route('/qna/delete', methods=['POST'])
@@ -53,7 +83,6 @@ def deleteQNA():
 # ----------------------------SH-----------------------------------
 # ----------------------------SH-----------------------------------
 
-
 # ----------------------------JH-----------------------------------
 # ----------------------------JH-----------------------------------
 # ----------------------------JH-----------------------------------
@@ -69,7 +98,24 @@ def home():
 @app.route('/main')
 def loadhome():
     if "userkey" in session:
-        qnas = db.QandA.find({}, {'_id': False})
+        qnas = list(db.QandA.find({}, {'_id': False}))
+        for idx, qna in enumerate(qnas):
+
+            try:
+                key_a = qna['userkey_a']
+                key_q = qna['userkey_q']
+                user_a = db.userDB.find_one({'key': str(key_a)})
+                user_q = db.userDB.find_one({'key': str(key_q)})
+                username_a = user_a['name']
+                username_q = user_q['name']
+                qnas[idx]['username_a'] = username_a
+                qnas[idx]['username_q'] = username_q
+
+            except:
+                key_q = qna['userkey_q']
+                user_q = db.userDB.find_one({'key': str(key_q)})
+                username_q = user_q['name']
+                qnas[idx]['username_q'] = username_q
         cnt_user = db.userDB.find_one({'key': session['userkey']})
         crn_user_name = cnt_user['name']
         cnt_user_status = cnt_user['usertype']
