@@ -68,23 +68,23 @@
                 <div class="sing_up_title">회원가입</div>
                 <div class="blank"></div>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="form_id">아이디</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
+                    <span class="input-group-text">아이디</span>
+                    <input id="form_id" type="text" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default">
                 </div>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="form_pw">패스워드</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
+                    <span class="input-group-text">패스워드</span>
+                    <input id="form_pw" type="text" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default">
                 </div>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="form_pw_check">패스워드확인</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
+                    <span class="input-group-text">패스워드확인</span>
+                    <input id="form_pw_check" type="text" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default">
                 </div>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="form_name">이름</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
+                    <span class="input-group-text">이름</span>
+                    <input id="form_name" type="text" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default">
                 </div>
                 <div class="input-group mb-3">
@@ -103,15 +103,48 @@
             let signup_btn = document.getElementById("signup_btn");
             let login_form = document.getElementById("form_login");
             let signup_form = document.getElementById("form_sign_up");
+            let login_submit = document.getElementById("login_submit");
+            let signup_submit = document.getElementById("form_submit");
 
             login_btn.addEventListener("click", function () {
                 signup_form.style.display = "none";
                 login_form.style.display = "flex";
             });
-
             signup_btn.addEventListener("click", function () {
                 login_form.style.display = "none";
                 signup_form.style.display = "flex";
+            });
+            signup_submit.addEventListener("click", function () {
+                let sign_up_id = document.getElementById("form_id").value;
+                let sign_up_password = document.getElementById("form_pw").value;
+                let sign_up_name = document.getElementById("form_name").value;
+                let sign_up_usertype = document.getElementById("inputGroupSelect01").value;
+                let usertype;
+                if (sign_up_usertype == 1) {
+                    usertype = 1
+                } else if (sign_up_usertype == 2) {
+                    usertype = 2
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/signup",
+                    data: {
+                        "id_give": sign_up_id,
+                        "password_give": sign_up_password,
+                        "name_give": sign_up_name,
+                        "usertype": sign_up_usertype
+                    },
+                    success: function (response) { // 성공하면
+                        if (response["result"] == "success") {
+                            alert("회원 가입 성공");
+                            window.location.reload();
+                        } else {
+                            alert("회원 가입 실패");
+                            window.location.reload();
+                        }
+                    }
+                })
             });
         </script>
     </body>
