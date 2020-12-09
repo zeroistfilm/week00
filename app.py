@@ -99,7 +99,7 @@ def session_test():
     if request.method == "GET":
         if "username" in session:
             print("유지중")
-            result = "유지중"
+            result = session['userkey']
         else:
             print("세션없음")
             result = "세션없음"
@@ -139,6 +139,32 @@ def make_session_permanent():
 #----------------------------JH-----------------------------------
 #----------------------------JH-----------------------------------
 #----------------------------JH-----------------------------------
+
+
+#----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+
+
+
+@app.route('/develophistory', methods=['POST'])
+def post_develophistory():
+    print('asd')
+    title_receive = request.form['title_give']  # 클라이언트로부터 url을 받는 부분
+    contents_receive = request.form['contents_give']  # 클라이언트로부터
+    userKey=session['userkey']
+
+    print(userKey)
+    history = {'title': title_receive, 'contents': contents_receive}
+    # db.history.insert_one(history)
+
+
+    return jsonify({'result': 'success'})
+#----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+#----------------------------YD-----------------------------------
+
+
 
 
 if __name__ == '__main__':
