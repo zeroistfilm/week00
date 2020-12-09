@@ -18,14 +18,57 @@
             window.location.href = 'http://54.180.91.148:5000/logout';
         }
 
+
+        function developHistoryPut(id){
+            console.log(id)
+            let weekid = id.slice(3,5);
+            console.log(weekid)
+
+            if ($('#develophistory').is(':empty')) {
+              let temphtml=`<div class="mb-3">
+                              <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                            </div>
+                            <div class="mb-3">
+                              <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                          </div>`
+            $("#week"+weekid).append(temphtml);
+            }
+
+
+            // if ($("#develophistory").css("display") == "flex") {
+            //     // post-box를 가리고
+            //     $("#develophistory").hide();
+            //     $("#showDevelopHistorybutton").text("show");
+            // } else {
+            //     // 아니면(눈에 보이지 않으면) post-box를 펴라
+            //     $("#develophistory").show();
+            //     $("#showDevelopHistorybutton").text("hide");
+            //
+            // }
+        }
+
         function showDevelopHistory() {
 
 
             if ($('#develophistory').is(':empty')) {
-                console.log('sss')
+
                 let temphtml = ``
-
-
+                let tempid=0
+                for(let i=1; i<19;i++){
+                    temphtml+=`<a id="week${i}" href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
+                                <ul style="width:100%"   id="weekday${i}"class="list-group list-group-horizontal">
+                                          <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">목</li>
+                                          <li id="fri${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">금</li>
+                                          <li id="sat${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">토</li>
+                                          <li id="sun${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">일</li>
+                                          <li id="mon${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">월</li>
+                                          <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">화</li>
+                                          <li id="wed${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">수</li>
+                                </ul>
+                                <ur id="workhistory${i}"></ur>`
+                }
                 $("#develophistory").append(temphtml);
 
             }
