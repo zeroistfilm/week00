@@ -100,7 +100,6 @@ def loadhome():
     if "userkey" in session:
         qnas = list(db.QandA.find({}, {'_id': False}))
         for idx, qna in enumerate(qnas):
-
             try:
                 key_a = qna['userkey_a']
                 key_q = qna['userkey_q']
@@ -110,12 +109,12 @@ def loadhome():
                 username_q = user_q['name']
                 qnas[idx]['username_a'] = username_a
                 qnas[idx]['username_q'] = username_q
-
             except:
                 key_q = qna['userkey_q']
                 user_q = db.userDB.find_one({'key': str(key_q)})
                 username_q = user_q['name']
                 qnas[idx]['username_q'] = username_q
+
         cnt_user = db.userDB.find_one({'key': session['userkey']})
         crn_user_name = cnt_user['name']
         cnt_user_status = cnt_user['usertype']
@@ -152,6 +151,8 @@ def postInfo():
     info_title_receive = request.form["info_title_give"]
     info_contents_receive = request.form["info_contents_give"]
     info_url_receive = request.form["info_url_give"]
+    info_image_url_receive = request.form["info_image_url_give"]
+
     info_uid = "info." + str(now.tm_year) + "." + str(now.tm_mon) + "." + str(now.tm_mday) + "." + str(
         now.tm_hour) + "." + str(now.tm_min) + "." + str(now.tm_sec)
 
@@ -159,6 +160,7 @@ def postInfo():
         "title": info_title_receive,
         "contents": info_contents_receive,
         "url": info_url_receive,
+        "image_url": info_image_url_receive,
         "uid": info_uid,
         "userkey": session["userkey"]
     }
@@ -236,76 +238,64 @@ def make_session_permanent():
 # ----------------------------JH-----------------------------------
 # ----------------------------JH-----------------------------------
 
-#----------------------------YD-----------------------------------
-#----------------------------YD-----------------------------------
-#----------------------------YD-----------------------------------
-
+# ----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
 
 
 @app.route('/develophistory', methods=['POST'])
 def post_develophistory():
-
     title_receive = request.form['title_give']  # 클라이언트로부터 url을 받는 부분
     contents_receive = request.form['contents_give']  # 클라이언트로부터
     id_receive = request.form['id_give']  #
-    userKey=session['userkey']
+    userKey = session['userkey']
 
     history = {'id': id_receive, 'title': title_receive, 'contents': contents_receive, 'userkey': userKey}
     db.history.insert_one(history)
 
-
     return jsonify({'result': 'success'})
-
 
 
 @app.route('/develophistory', methods=['GET'])
 def read_develophistory():
-
     keyparm = request.args.get("key")
     if keyparm:
-        userKey=keyparm
+        userKey = keyparm
     else:
         userKey = session['userkey']
 
-    historys = list(db.history.find({'userkey': userKey},{"_id": False}))
-
-
-
+    historys = list(db.history.find({'userkey': userKey}, {"_id": False}))
 
     return jsonify({'result': 'success', 'historys': historys})
 
 
 @app.route('/develophistory/edit', methods=['POST'])
 def edit_develophistory():
-
     title_receive = request.form['title_give']  # 클라이언트로부터 url을 받는 부분
     contents_receive = request.form['contents_give']  # 클라이언트로부터
     id_receive = request.form['id_give']  #
 
-    userKey=session['userkey']
+    userKey = session['userkey']
 
     db.history.remove({'id': id_receive})
     history = {'id': id_receive, 'title': title_receive, 'contents': contents_receive, 'userkey': userKey}
     db.history.insert_one(history)
 
-
     return jsonify({'result': 'success'})
+
 
 @app.route('/develophistory/delete', methods=['POST'])
 def delete_develophistory():
-
     id_receive = request.form['id_give']  #
-    userKey=session['userkey']
+    userKey = session['userkey']
     db.history.remove({'id': id_receive})
-
-
 
     return jsonify({'result': 'success'})
 
 
-#----------------------------YD-----------------------------------
-#----------------------------YD-----------------------------------
-#----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

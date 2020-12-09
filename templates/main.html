@@ -48,10 +48,7 @@
                 let info_form_title = document.getElementById("info_form_title").value;
                 let info_form_contents = document.getElementById("info_form_contents").value;
                 let info_form_url = document.getElementById("info_form_url").value;
-
-                console.log(info_form_title);
-                console.log(info_form_contents);
-                console.log(info_form_url);
+                let info_form_image_url = document.getElementById("info_form_img_url").value;
 
                 $.ajax({
                     type: "POST",
@@ -59,7 +56,8 @@
                     data: {
                         'info_title_give': info_form_title,
                         'info_contents_give': info_form_contents,
-                        "info_url_give": info_form_url
+                        "info_url_give": info_form_url,
+                        "info_image_url_give" : info_form_image_url
                     },
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
@@ -196,7 +194,6 @@
                     let tempid = 0
 
                     for (let i = 1; i < 19; i++) {
-
 
                         temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
                         <ul  style="display:none;"  id="weekday${i}"class="list-group list-group-horizontal">
@@ -634,7 +631,7 @@
                     <div class="info_add_title">
                         <div>INFO UPLOAD</div>
                     </div>
-                    <div class="blank" style="height:15%"></div>
+                    <div class="blank" style="height:10%"></div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">TITLE</span>
                         <input id="info_form_title" type="text" class="form-control"
@@ -644,6 +641,12 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text">URL</span>
                         <input id="info_form_url" type="text" class="form-control"
+                               aria-label="Sizing example input"
+                               aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">IMAGE</span>
+                        <input id="info_form_img_url" type="text" class="form-control"
                                aria-label="Sizing example input"
                                aria-describedby="inputGroup-sizing-default">
                     </div>
