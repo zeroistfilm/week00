@@ -55,7 +55,7 @@
             $.ajax({
                 type: "POST", // POST 방식으로 요청하겠다.
                 url: "/develophistory", // /memo라는 url에 요청하겠다.
-                data: {title_give: title, contents_give: contents}, // 데이터를 주는 방법
+                data: {title_give: title, contents_give: contents, id_give:id}, // 데이터를 주는 방법
                 success: function (response) { // 성공하면
                     if (response["result"] == "success") {
                         alert("포스팅 성공!");
@@ -70,106 +70,112 @@
 
         function showDevelopHistory() {
 
-                let temphtml = ``
-                let tempid = 0
-                for (let i = 1; i < 19; i++) {
-                    temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
-                                <ul  style="display:none;"  id="weekday${i}"class="list-group list-group-horizontal">
-                                          <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">목</li>
-                                          <li id="fri${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">금</li>
-                                          <li id="sat${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">토</li>
-                                          <li id="sun${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">일</li>
-                                          <li id="mon${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">월</li>
-                                          <li id="tue${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">화</li>
-                                          <li id="wed${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">수</li>
-                                </ul>
-                                    <ur id="workhistorythu${i}" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">thu title</label>
-                                            <input id="titlethu${i}"  type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
-                                        </div>
-                                        <div class="mbz-3">
-                                            <label for="exampleFormControlTextarea1" class="form-label">contents</label>
-                                            <textarea id="contentsthu${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                        <button type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
-                                        <button type="button" class="btn btn-outline-success">수정</button>
-                                        <button type="button" class="btn btn-outline-secondary">삭제</button>
-                                    </ur>
-                                    <ur id="workhistoryfri${i}" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">fri title</label>
-                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
-                                        </div>
-                                        <div class="mbz-3">
-                                            <label for="exampleFormControlTextarea1" class="form-label">contents</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </ur>
-                                    <ur id="workhistorysat${i}" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">sat title</label>
-                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
-                                        </div>
-                                        <div class="mbz-3">
-                                            <label for="exampleFormControlTextarea1" class="form-label">contents</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </ur>
-                                    <ur id="workhistorysun${i}" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">sun title</label>
-                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
-                                        </div>
-                                        <div class="mbz-3">
-                                            <label for="exampleFormControlTextarea1" class="form-label">contents</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </ur>
-                                    <ur id="workhistorymon${i}" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">mon title</label>
-                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
-                                        </div>
-                                        <div class="mbz-3">
-                                            <label for="exampleFormControlTextarea1" class="form-label">contents</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </ur>
-                                    <ur id="workhistorytue${i}" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">tue title</label>
-                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
-                                        </div>
-                                        <div class="mbz-3">
-                                            <label for="exampleFormControlTextarea1" class="form-label">contents</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </ur>
-                                    <ur id="workhistorywed${i}" style="display: none;">
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">wed title</label>
-                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
-                                        </div>
-                                        <div class="mbz-3">
-                                            <label for="exampleFormControlTextarea1" class="form-label">contents</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </ur>
-                                `
+
+            $.ajax({
+                type: "GET", // POST 방식으로 요청하겠다.
+                url: "/develophistory", // /memo라는 url에 요청하겠다.
+                data: {}, // 데이터를 주는 방법
+                success: function (response) {
+
+                    let historys = response["historys"];
+
+                    let id = historys['id']
+                    let title = historys['title']
+                    let contents = historys['contents']
+
+                    let temphtml = ``
+                    let tempid = 0
+                    for (let i = 1; i < 19; i++) {
+                        temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
+                            <ul  style="display:none;"  id="weekday${i}"class="list-group list-group-horizontal">
+                                      <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">목</li>
+                                      <li id="fri${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">금</li>
+                                      <li id="sat${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">토</li>
+                                      <li id="sun${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">일</li>
+                                      <li id="mon${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">월</li>
+                                      <li id="tue${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">화</li>
+                                      <li id="wed${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id)">수</li>
+                            </ul>
+                                <ur id="workhistorythu${i}" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">thu title</label>
+                                        <input id="titlethu${i}"  type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
+                                    </div>
+                                    <div class="mbz-3">
+                                        <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                        <textarea id="contentsthu${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
+                                    <button type="button" class="btn btn-outline-success">수정</button>
+                                    <button type="button" class="btn btn-outline-secondary">삭제</button>
+                                </ur>
+                                <ur id="workhistoryfri${i}" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">fri title</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
+                                    </div>
+                                    <div class="mbz-3">
+                                        <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </ur>
+                                <ur id="workhistorysat${i}" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">sat title</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
+                                    </div>
+                                    <div class="mbz-3">
+                                        <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </ur>
+                                <ur id="workhistorysun${i}" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">sun title</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
+                                    </div>
+                                    <div class="mbz-3">
+                                        <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </ur>
+                                <ur id="workhistorymon${i}" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">mon title</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
+                                    </div>
+                                    <div class="mbz-3">
+                                        <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </ur>
+                                <ur id="workhistorytue${i}" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">tue title</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
+                                    </div>
+                                    <div class="mbz-3">
+                                        <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </ur>
+                                <ur id="workhistorywed${i}" style="display: none;">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">wed title</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="title">
+                                    </div>
+                                    <div class="mbz-3">
+                                        <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </ur>
+                            `
+                    }
+                    $("#develophistory").append(temphtml);
+
                 }
-                $("#develophistory").append(temphtml);
+            })
 
-
-            // if ($("#develophistory").css("display") == "flex") {
-            //     // post-box를 가리고
-            //     $("#develophistory").hide();
-            //     $("#showDevelopHistorybutton").text("show");
-            // } else {
-            //     // 아니면(눈에 보이지 않으면) post-box를 펴라
-            //     $("#develophistory").show();
-            //     $("#showDevelopHistorybutton").text("hide");
-            // }
         }
 
         function showday(id) {
@@ -421,7 +427,12 @@
                 <div>Develop History</div>
             </div>
             <div class="content_contents">
-                <div id="develophistory" style="width: 100%" class="list-group"></div>
+                <div id="develophistory" style="width: 100%" class="list-group">
+
+
+
+
+                </div>
             </div>
         </div>
         <!---------------YD------------------->
