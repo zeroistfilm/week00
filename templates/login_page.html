@@ -13,8 +13,8 @@
                 crossorigin="anonymous"></script>
         <script>
 
-            let server_location = "localhost:5000";
-
+            let server_location = "54.180.91.148";
+  
             function getLoginData() {
                 let id = $("#login_id").val();
                 let password = $("#login_password").val();
@@ -27,6 +27,7 @@
                         if (response["result"] == "success") {
                             alert("login");
                             window.location.href = 'http://' + server_location + '/main';
+
                         } else {
                             alert()
                         }
