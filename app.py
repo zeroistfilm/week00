@@ -63,9 +63,23 @@ def home():
 
 @app.route('/main')
 def loadhome():
-    qnas = db.QandA.find({}, {'_id': False})
     if "username" in session:
-        return render_template('main.html', qnas=qnas)
+        qnas = db.QandA.find({}, {'_id': False})
+
+        infos = list(db.info.find({}, {"_id": False}))
+        infosFinduser = []
+        for info in infos:
+            key = info["userkey"]
+            user = db.userDB.find_one({'key': str(key)})
+            if user != None:
+                infosFinduser.append(user)
+
+        print(len(infos))
+        print(len(infosFinduser))
+
+        infos_package = [infos, infosFinduser]
+
+        return render_template('main.html', qnas=qnas, infos_package=infos_package)
     else:
         return render_template('login_page.html')
 
