@@ -70,6 +70,16 @@ def home():
 def loadhome():
     if "userkey" in session:
         qnas = db.QandA.find({}, {'_id': False})
+        cnt_user = db.userDB.find_one({'key': session['userkey']})
+        crn_user_name = cnt_user['name']
+        cnt_user_status = cnt_user['usertype']
+        cnt_status = "-1"
+        if cnt_user_status == "1":
+            cnt_status = "교육생"
+        elif cnt_user_status == "2":
+            cnt_status = "운영진"
+        else:
+            cnt_status = "UNKOWN"
 
         infos = list(db.info.find({}, {"_id": False}))
         infosFinduser = []
@@ -84,9 +94,32 @@ def loadhome():
 
         infos_package = [infos, infosFinduser]
 
-        return render_template('main.html', qnas=qnas, infos_package=infos_package)
+        return render_template('main.html', qnas=qnas, infos_package=infos_package, cnt_user=crn_user_name,
+                               cnt_status=cnt_status)
     else:
         return render_template('login_page.html')
+
+
+@app.route('/postinfo', methods=['POST'])
+def postInfo():
+    now = time.gmtime(time.time())
+    info_title_receive = request.form["info_title_give"]
+    info_contents_receive = request.form["info_contents_give"]
+    info_url_receive = request.form["info_url_give"]
+    info_uid = "info." + str(now.tm_year) + "." + str(now.tm_mon) + "." + str(now.tm_mday) + "." + str(
+        now.tm_hour) + "." + str(now.tm_min) + "." + str(now.tm_sec)
+
+    info = {
+        "title": info_title_receive,
+        "contents": info_contents_receive,
+        "url": info_url_receive,
+        "uid": info_uid,
+        "userkey": session["userkey"]
+    }
+
+    db.info.insert_one(info)
+
+    return jsonify({"result": "success"})
 
 
 @app.route('/signup', methods=['POST'])
@@ -157,23 +190,20 @@ def make_session_permanent():
 # ----------------------------JH-----------------------------------
 # ----------------------------JH-----------------------------------
 
-#----------------------------YD-----------------------------------
-#----------------------------YD-----------------------------------
-#----------------------------YD-----------------------------------
-
+# ----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
 
 
 @app.route('/develophistory', methods=['POST'])
 def post_develophistory():
-
     title_receive = request.form['title_give']  # 클라이언트로부터 url을 받는 부분
     contents_receive = request.form['contents_give']  # 클라이언트로부터
     id_receive = request.form['id_give']  #
-    userKey=session['userkey']
+    userKey = session['userkey']
 
     history = {'id': id_receive, 'title': title_receive, 'contents': contents_receive, 'userkey': userKey}
     db.history.insert_one(history)
-
 
     return jsonify({'result': 'success'})
 
@@ -191,8 +221,8 @@ def read_develophistory():
     return jsonify({'result': 'success', 'historys': historys})
 
 
-#----------------------------YD-----------------------------------
-#----------------------------YD-----------------------------------
-#----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
+# ----------------------------YD-----------------------------------
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

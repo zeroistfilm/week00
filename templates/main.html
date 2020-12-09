@@ -15,15 +15,66 @@
                 crossorigin="anonymous">
         </script>
         <script>
-
             let server_location = "localhost:5000";
 
             // --------------------------------JH------------------------------------
             // --------------------------------JH------------------------------------
             // --------------------------------JH------------------------------------
 
+
+            function init() {
+                let info_add_form = document.getElementById("info_add_form");
+                info_btn(info_add_form);
+                infoAdd(info_add_form);
+            }
+
             function logout() {
                 window.location.href = 'http://' + server_location + '/logout';
+            }
+
+            function infoAdd(form) {
+                let infoAdd_btn = document.getElementById("info_add");
+                infoAdd_btn.addEventListener("click", function () {
+                    form.style.display = "flex";
+                });
+            }
+
+            function info_btn(form) {
+                let info_submit_btn = document.getElementById("info_add_submit");
+                let info_cancel_btn = document.getElementById("info_add_cancel");
+
+                info_submit_btn.addEventListener("click", function () {
+
+                    let info_form_title = document.getElementById("info_form_title").value;
+                    let info_form_contents = document.getElementById("info_form_contents").value;
+                    let info_form_url = document.getElementById("info_form_url").value;
+
+                    console.log(info_form_title);
+                    console.log(info_form_contents);
+                    console.log(info_form_url);
+
+                    $.ajax({
+                        type: "POST",
+                        url: `/postinfo`,
+                        data: {
+                            'info_title_give': info_form_title,
+                            'info_contents_give': info_form_contents,
+                            "info_url_give": info_form_url
+                        },
+                        success: function (response) { // 성공하면
+                            if (response["result"] == "success") {
+                                alert("등록 성공");
+                                form.style.display = "none";
+                            } else {
+                                alert("오류 발생");
+                            }
+                        }
+                    });
+                });
+
+                info_cancel_btn.addEventListener("click", function () {
+                    form.style.display = "none";
+                });
             }
 
             // --------------------------------JH------------------------------------
@@ -221,7 +272,7 @@
                 <div class="blank" style="height:8%"></div>
                 <div class="header-nav-bar">
                     <div class="nav-bar-contents">
-                        <div class="login_status">교육생 / 조정훈님 로그인</div>
+                        <div class="login_status">{{cnt_status}} / {{cnt_user}}님 로그인</div>
                         <div class="blank" style="width:1%"></div>
                         <div class="blank" style="width:2%"></div>
                     </div>
@@ -260,7 +311,6 @@
                             </form>
                         </div>
                         <div class="content_contents">
-
                             {% for qna in qnas %}
                             <div class="card" style="width: 100%;" id={{qna['qa_uid']}}>
                                 <div class="card-body">
@@ -313,8 +363,43 @@
                     <!---------------JH------------------->
 
                     <div class="info">
+                        <div id="info_add_form">
+                            <div class="info_add_title">
+                                <div>INFO UPLOAD</div>
+                            </div>
+                            <div class="blank" style="height:15%"></div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">TITLE</span>
+                                <input id="info_form_title" type="text" class="form-control"
+                                       aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">URL</span>
+                                <input id="info_form_url" type="text" class="form-control"
+                                       aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">CONTENTS</span>
+                                <input id="info_form_contents" type="text" class="form-control"
+                                       aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div style="width:100%; display:flex; flex-direction: row; justify-content: center">
+                                <button id="info_add_submit" type="button" class="btn btn-primary btn-sm btn-info">등록
+                                </button>
+                                <div style="width: 3%"></div>
+                                <button id="info_add_cancel" type="button" class="btn btn-secondary btn-sm btn-info">
+                                    삭제
+                                </button>
+                            </div>
+                        </div>
                         <div class="content_name">
-                            <div>INFOMATION</div>
+                            <div style="width: 10%"></div>
+                            <div style="width: 80%">INFOMATION</div>
+                            <div id="info_add" class="info_add">+</div>
+                            <div style="width: 5%"></div>
                         </div>
                         <div class="blank" style="height:1%"></div>
                         <div class="content_contents">
@@ -322,18 +407,32 @@
                             {% set infosFinduser = infos_package[1] %}
                             {% for info in infos %}
                             {% set index = loop.index-1|int %}
-                            <div id="" class="card" style="width: 100%">
-                                <div class="card-header">
-                                    {{info["title"]}}
-                                    {{index}}
-                                </div>
-                                <div class="card-body">
-                                    <blockquote class="blockquote mb-0">
-                                        {{info["contents"]}}
-                                        <footer class="blockquote-footer">
-                                            {{ infosFinduser[index]['id'] }}
-                                        </footer>
-                                    </blockquote>
+                            <!--                            <div id="" class="card" style="width: 100%">-->
+                            <!--                                <div class="card-header">-->
+                            <!--                                    {{info["title"]}}-->
+                            <!--                                    {{index}}-->
+                            <!--                                </div>-->
+                            <!--                                <div class="card-body">-->
+                            <!--                                    <blockquote class="blockquote mb-0">-->
+                            <!--                                        {{info["contents"]}}-->
+                            <!--                                        <footer class="blockquote-footer">-->
+                            <!--                                            {{ infosFinduser[index]['name'] }}-->
+                            <!--                                        </footer>-->
+                            <!--                                    </blockquote>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <div class="card mb-3" style="width: 100%;">
+                                <div class="row g-0" style="width: 90%;">
+                                    <div class="col-md-4" style="background-image: url('https://cdn.gamemeca.com/data_center/219/863/20201013173619.jpg')">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{info["title"]}}</h5>
+                                            <p class="card-text">{{info["contents"]}}</p>
+                                            <p class="card-text"><small class="text-muted">
+                                                작성자 : {{infosFinduser[index]['name'] }}</small></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -368,6 +467,9 @@
                 </div>
             </div>
         </div>
-        <script>showDevelopHistory();</script>
+        <script>
+            showDevelopHistory();
+            init();
+        </script>
     </body>
 </html>
