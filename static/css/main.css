@@ -1,7 +1,7 @@
 .wrapper {
     width: 100%;
     height: 1000px;
-    background-color: #3A7734;
+    /*background-color: #3A7734;*/
 }
 
 /*Header 파트*/
@@ -9,25 +9,55 @@
 .header {
     height: 200px;
     width: 100%;
-    background-color: #3B666B;
+    /*background-color: #3B666B;*/
 }
 
-.header-logo {
-    height: 65%;
+.logo_nav {
+    height: 70%;
     width: 100%;
-    background-color: #177199;
-    text-align: center;
-    font-size: 2em;
-    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .header-nav-bar {
-    height: 35%;
+    height: 25%;
     width: 100%;
-    background-color: #A5D6D9;
+    background-color: #177199;
     text-align: right;
     font-size: 1.5em;
     font-weight: bolder;
+    display: flex;
+    /*flex-direction: row;*/
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-bar-contents {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+}
+
+.login_status {
+    font-size: 0.7em;
+    color: white;
+}
+
+.logout{
+    position: fixed;
+    right: 0.2em;
+    top: 0.2em;
+    height: 80px;
+    width: 80px;
+    background-image: url("/static/image/logout.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
 }
 
 /* Contents Part*/
@@ -35,51 +65,72 @@
 .contents {
     height: 700px;
     width: 100%;
-    background-color: #9C1A1C;
+    /*background-color: #9C1A1C;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.container_contents {
+    width: 90%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 .q_and_a {
     height: 100%;
-    width: 33.3%;
-    background-color: #DDECEE;
+    width: 33%;
     display: flex;
     flex-direction: column;
+    border-radius: 5px;
 }
 
 .info {
     height: 100%;
-    width: 33.3%;
-    background-color: blue;
+    width: 33%;
+    border-radius: 5px;
+
 }
 
 .undefined {
     height: 100%;
-    width: 33.3%;
-    background-color: beige;
+    width: 33%;
+    border-radius: 5px;
+
 }
 
 .content_name {
-    height: 15%;
+    height: 7%;
     width: 100%;
-    background-color: bisque;
+    background-color: #30799B;
+    color: white;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.5em;
     font-weight: bolder;
+    border-radius: 5px;
 }
 
 .content_contents {
     width: 100%;
-    height: 85%;
+    height: 92%;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: scroll;
+    -ms-overflow-style: none;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+
+.content_contents::-webkit-scrollbar{
+    display: none;
 }
 
 /*Q&A 파트*/
@@ -119,7 +170,8 @@
     width: 100%;
     background-color: white;
 }
-.writer_and_time{
+
+.writer_and_time {
     height: 2em;
     width: 100%;
     background-color: #30799B;
@@ -128,13 +180,13 @@
     justify-content: flex-end;
 }
 
-.writer{
+.writer {
     height: 100%;
     width: 30%;
     border: 1px solid black;
 }
 
-.write_time{
+.write_time {
     height: 100%;
     width: 30%;
     border: 1px solid black;
@@ -178,5 +230,26 @@
 .footer {
     height: 100px;
     width: 100%;
-    background-color: brown;
+    background-color: #177199;
+    border-top: 1px solid lightgray;
+}
+
+
+.login_logo {
+    background-image: url("/static/image/logo.jpg");
+    width: 1000px;
+    height: 100px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signature{
+    font-size: 1em;
 }
