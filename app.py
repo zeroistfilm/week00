@@ -12,19 +12,6 @@ client = MongoClient('mongodb://test:test@54.180.91.148', 27017)
 db = client.jungglebook
 app.secret_key = b"!@#$1234"
 
-
-@app.before_request
-def make_session_permanent():
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=5)
-
-@app.route('/')
-def home():
-    if "username" in session:
-        return render_template('main.html')
-    else:
-        return render_template('login_page.html')
-
 #----------------------------SH-----------------------------------
 #----------------------------SH-----------------------------------
 #----------------------------SH-----------------------------------
@@ -62,6 +49,18 @@ def deleteQNA():
 #----------------------------SH-----------------------------------
 #----------------------------SH-----------------------------------
 
+
+#----------------------------JH-----------------------------------
+#----------------------------JH-----------------------------------
+#----------------------------JH-----------------------------------
+
+@app.route('/')
+def home():
+    if "username" in session:
+        return redirect(url_for('loadhome'))
+    else:
+        return render_template('login_page.html')
+
 @app.route('/main')
 def loadhome():
     qnas = db.QandA.find({}, {'_id': False})
@@ -80,7 +79,6 @@ def signUp():
     # 3. mongoDB에 데이터를 넣기
     db.userDB.insert_one(userInfo)
 
-
 @app.route('/login', methods=['POST', 'GET'])
 def session_test():
     result = "";
@@ -97,14 +95,12 @@ def session_test():
     else:
         user_id = request.form['id_give']
         user_password = request.form['password_give']
-
         user = db.userDB.find_one({'id': str(user_id), 'password': str(user_password)})
 
         if user:
             if "username" in session:
                 print("유지중")
                 result = escape(session['username'])
-
             else:
                 print("세션없음")
                 session['username'] = user_id
@@ -115,12 +111,20 @@ def session_test():
 
             return jsonify({"result": "일치하는 유저가 없습니다."})
 
-
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     print('로그아웃 되었습니다.')
     return redirect(url_for('home'))
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=5)
+
+#----------------------------JH-----------------------------------
+#----------------------------JH-----------------------------------
+#----------------------------JH-----------------------------------
 
 
 if __name__ == '__main__':
