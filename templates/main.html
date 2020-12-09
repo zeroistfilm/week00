@@ -1,201 +1,201 @@
 <!DOCTYPE html>
 
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/css/main.css">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+              integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/css/main.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-            crossorigin="anonymous">
-    </script>
-    <script>
-        let server_location = "localhost:5000";
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+                crossorigin="anonymous">
+        </script>
+        <script>
+            let server_location = "localhost:5000";
 
-        // --------------------------------JH------------------------------------
-        // --------------------------------JH------------------------------------
-        // --------------------------------JH------------------------------------
+            // --------------------------------JH------------------------------------
+            // --------------------------------JH------------------------------------
+            // --------------------------------JH------------------------------------
 
 
-        function init() {
-            let info_add_form = document.getElementById("info_add_form");
-            info_btn(info_add_form);
-            infoAdd(info_add_form);
-        }
+            function init() {
+                let info_add_form = document.getElementById("info_add_form");
+                info_btn(info_add_form);
+                infoAdd(info_add_form);
+            }
 
-        function logout() {
-            window.location.href = 'http://' + server_location + '/logout';
-        }
+            function logout() {
+                window.location.href = 'http://' + server_location + '/logout';
+            }
 
-        function infoAdd(form) {
-            let infoAdd_btn = document.getElementById("info_add");
-            infoAdd_btn.addEventListener("click", function () {
-                form.style.display = "flex";
-            });
-        }
+            function infoAdd(form) {
+                let infoAdd_btn = document.getElementById("info_add");
+                infoAdd_btn.addEventListener("click", function () {
+                    form.style.display = "flex";
+                });
+            }
 
-        function info_btn(form) {
-            let info_submit_btn = document.getElementById("info_add_submit");
-            let info_cancel_btn = document.getElementById("info_add_cancel");
+            function info_btn(form) {
+                let info_submit_btn = document.getElementById("info_add_submit");
+                let info_cancel_btn = document.getElementById("info_add_cancel");
 
-            info_submit_btn.addEventListener("click", function () {
+                info_submit_btn.addEventListener("click", function () {
 
-                let info_form_title = document.getElementById("info_form_title").value;
-                let info_form_contents = document.getElementById("info_form_contents").value;
-                let info_form_url = document.getElementById("info_form_url").value;
-                let info_form_image_url = document.getElementById("info_form_img_url").value;
+                    let info_form_title = document.getElementById("info_form_title").value;
+                    let info_form_contents = document.getElementById("info_form_contents").value;
+                    let info_form_url = document.getElementById("info_form_url").value;
+                    let info_form_image_url = document.getElementById("info_form_img_url").value;
 
+                    $.ajax({
+                        type: "POST",
+                        url: `/postinfo`,
+                        data: {
+                            'info_title_give': info_form_title,
+                            'info_contents_give': info_form_contents,
+                            "info_url_give": info_form_url,
+                            "info_image_url_give": info_form_image_url
+                        },
+                        success: function (response) { // 성공하면
+                            if (response["result"] == "success") {
+                                alert("등록 성공");
+                                form.style.display = "none";
+                            } else {
+                                alert("오류 발생");
+                            }
+                        }
+                    });
+                });
+
+                info_cancel_btn.addEventListener("click", function () {
+                    form.style.display = "none";
+                });
+            }
+
+            // --------------------------------JH------------------------------------
+            // --------------------------------JH------------------------------------
+            // --------------------------------JH------------------------------------
+
+            // --------------------------------YD------------------------------------
+            // --------------------------------YD------------------------------------
+            // --------------------------------YD------------------------------------
+
+
+            function developHistoryPut(id, parentsid) {
+                console.log(id)
+                console.log($("#workhistory" + id).css("display"))
+                $("#workhistorymon" + id.slice(3, 5)).hide();
+                $("#workhistorytue" + id.slice(3, 5)).hide();
+                $("#workhistorywed" + id.slice(3, 5)).hide();
+                $("#workhistorythu" + id.slice(3, 5)).hide();
+                $("#workhistoryfri" + id.slice(3, 5)).hide();
+                $("#workhistorysat" + id.slice(3, 5)).hide();
+                $("#workhistorysun" + id.slice(3, 5)).hide();
+
+                if ($("#workhistory" + id).css("display") == "none") {
+                    $("#workhistory" + id).show();
+                } else {
+                    $("#workhistory" + id).hide();
+                }
+            }
+
+            function insertcontents(id) {
+                id = id.slice(11, 16)
+
+                let title = $("#title" + id).val();
+                let contents = $("#contents" + id).val();
+                // // 2. memo에 POST 방식으로 메모 생성 요청하기
                 $.ajax({
-                    type: "POST",
-                    url: `/postinfo`,
-                    data: {
-                        'info_title_give': info_form_title,
-                        'info_contents_give': info_form_contents,
-                        "info_url_give": info_form_url,
-                        "info_image_url_give" : info_form_image_url
-                    },
+                    type: "POST", // POST 방식으로 요청하겠다.
+                    url: "/develophistory", // /memo라는 url에 요청하겠다.
+                    data: {title_give: title, contents_give: contents, id_give: id}, // 데이터를 주는 방법
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
-                            alert("등록 성공");
-                            form.style.display = "none";
+                            alert("포스팅 성공!");
+                            // 3. 성공 시 페이지 새로고침하기
+                            window.location.reload();
                         } else {
-                            alert("오류 발생");
+                            alert("서버 오류!")
                         }
                     }
-                });
-            });
-
-            info_cancel_btn.addEventListener("click", function () {
-                form.style.display = "none";
-            });
-        }
-
-        // --------------------------------JH------------------------------------
-        // --------------------------------JH------------------------------------
-        // --------------------------------JH------------------------------------
-
-     // --------------------------------YD------------------------------------
-        // --------------------------------YD------------------------------------
-        // --------------------------------YD------------------------------------
-
-
-        function developHistoryPut(id,parentsid) {
-            console.log(id)
-            console.log($("#workhistory" + id).css("display"))
-             $("#workhistorymon" + id.slice(3,5)).hide();
-             $("#workhistorytue" + id.slice(3,5)).hide();
-             $("#workhistorywed" + id.slice(3,5)).hide();
-             $("#workhistorythu" + id.slice(3,5)).hide();
-             $("#workhistoryfri" + id.slice(3,5)).hide();
-             $("#workhistorysat" + id.slice(3,5)).hide();
-             $("#workhistorysun" + id.slice(3,5)).hide();
-
-            if ($("#workhistory" + id).css("display") == "none") {
-                $("#workhistory" + id).show();
-            } else {
-                $("#workhistory" + id).hide();
-            }
-        }
-
-        function insertcontents(id){
-            id=id.slice(11,16)
-
-            let title = $("#title"+id).val();
-            let contents = $("#contents"+id).val();
-            // // 2. memo에 POST 방식으로 메모 생성 요청하기
-            $.ajax({
-                type: "POST", // POST 방식으로 요청하겠다.
-                url: "/develophistory", // /memo라는 url에 요청하겠다.
-                data: {title_give: title, contents_give: contents, id_give:id}, // 데이터를 주는 방법
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        alert("포스팅 성공!");
-                        // 3. 성공 시 페이지 새로고침하기
-                        window.location.reload();
-                    } else {
-                        alert("서버 오류!")
-                    }
-                }
-            })
-        }
-
-        function editcontents(id){
-            id=id.slice(11,16)
-
-            let title = $("#title"+id).val();
-            let contents = $("#contents"+id).val();
-            // // 2. memo에 POST 방식으로 메모 생성 요청하기
-            $.ajax({
-                type: "POST", // POST 방식으로 요청하겠다.
-                url: "/develophistory/edit", // /memo라는 url에 요청하겠다.
-                data: {title_give: title, contents_give: contents, id_give:id}, // 데이터를 주는 방법
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        alert("포스팅 성공!");
-                        // 3. 성공 시 페이지 새로고침하기
-                        window.location.reload();
-                    } else {
-                        alert("서버 오류!")
-                    }
-                }
-            })
-        }
-
-        function deletecontents(id) {
-            id = id.slice(11, 16)
-
-            let title = $("#title" + id).val();
-            let contents = $("#contents" + id).val();
-            // // 2. memo에 POST 방식으로 메모 생성 요청하기
-            $.ajax({
-                type: "POST", // POST 방식으로 요청하겠다.
-                url: "/develophistory/delete", // /memo라는 url에 요청하겠다.
-                data: {id_give: id}, // 데이터를 주는 방법
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        alert("포스팅 성공!");
-                        // 3. 성공 시 페이지 새로고침하기
-                        window.location.reload();
-                    } else {
-                        alert("서버 오류!")
-                    }
-                }
-            })
-        }
-
-        function showDevelopHistory(key) {
-
-            $("#develophistory").empty();
-            let path =null
-            if(key=="init"){
-                path ="/develophistory"
-            }else {
-                path="/develophistory?key="+key
+                })
             }
 
+            function editcontents(id) {
+                id = id.slice(11, 16)
 
-            $.ajax({
-                type: "GET", // POST 방식으로 요청하겠다.
-                url: path, // /memo라는 url에 요청하겠다.
-                data: {}, // 데이터를 주는 방법
-                success: function (response) {
+                let title = $("#title" + id).val();
+                let contents = $("#contents" + id).val();
+                // // 2. memo에 POST 방식으로 메모 생성 요청하기
+                $.ajax({
+                    type: "POST", // POST 방식으로 요청하겠다.
+                    url: "/develophistory/edit", // /memo라는 url에 요청하겠다.
+                    data: {title_give: title, contents_give: contents, id_give: id}, // 데이터를 주는 방법
+                    success: function (response) { // 성공하면
+                        if (response["result"] == "success") {
+                            alert("포스팅 성공!");
+                            // 3. 성공 시 페이지 새로고침하기
+                            window.location.reload();
+                        } else {
+                            alert("서버 오류!")
+                        }
+                    }
+                })
+            }
+
+            function deletecontents(id) {
+                id = id.slice(11, 16)
+
+                let title = $("#title" + id).val();
+                let contents = $("#contents" + id).val();
+                // // 2. memo에 POST 방식으로 메모 생성 요청하기
+                $.ajax({
+                    type: "POST", // POST 방식으로 요청하겠다.
+                    url: "/develophistory/delete", // /memo라는 url에 요청하겠다.
+                    data: {id_give: id}, // 데이터를 주는 방법
+                    success: function (response) { // 성공하면
+                        if (response["result"] == "success") {
+                            alert("포스팅 성공!");
+                            // 3. 성공 시 페이지 새로고침하기
+                            window.location.reload();
+                        } else {
+                            alert("서버 오류!")
+                        }
+                    }
+                })
+            }
+
+            function showDevelopHistory(key) {
+
+                $("#develophistory").empty();
+                let path = null
+                if (key == "init") {
+                    path = "/develophistory"
+                } else {
+                    path = "/develophistory?key=" + key
+                }
 
 
-                    let historys = response["historys"];
-                    console.log(historys)
+                $.ajax({
+                    type: "GET", // POST 방식으로 요청하겠다.
+                    url: path, // /memo라는 url에 요청하겠다.
+                    data: {}, // 데이터를 주는 방법
+                    success: function (response) {
 
 
-                    let temphtml = ``
-                    let tempid = 0
+                        let historys = response["historys"];
+                        console.log(historys)
 
-                    for (let i = 1; i < 19; i++) {
 
-                        temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
+                        let temphtml = ``
+                        let tempid = 0
+
+                        for (let i = 1; i < 19; i++) {
+
+                            temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
                         <ul  style="display:none;"  id="weekday${i}"class="list-group list-group-horizontal">
                               <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">목</li>
                               <li id="fri${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">금</li>
@@ -300,171 +300,170 @@
                             </ur>
 
                         `
-                    }
-
-                    $("#develophistory").append(temphtml);
-
-                    for (let i = 0; i < historys.length; i++) {
-
-                        let week = historys[i]['id']
-                        let title = historys[i]['title']
-                        let contents = historys[i]['contents']
-
-
-                        for (let j =1; j<19;j++){
-                            if(week.slice(3,5)==j){
-
-                                $("#title"+week.slice(0,3)+j).val(title)
-                                $("#contents"+week.slice(0,3)+j).val(contents)
-                                $("#insert"+week.slice(0,3)+j).hide();
-                                $("#edit"+week.slice(0,3)+j).show();
-                                $("#delete"+week.slice(0,3)+j).show();
-
-                                $("#"+week.slice(0,3)+j).css("background-color","#FDF5E6")
-                                $("#week"+j).css("background-color","#B0E0E6")
-
-
-
-                            }
                         }
 
+                        $("#develophistory").append(temphtml);
 
-                        // if id.slice(0,3)=="mon"(
-                        //
-                        // )
-                        // $("#post-url").val()
+                        for (let i = 0; i < historys.length; i++) {
+
+                            let week = historys[i]['id']
+                            let title = historys[i]['title']
+                            let contents = historys[i]['contents']
+
+
+                            for (let j = 1; j < 19; j++) {
+                                if (week.slice(3, 5) == j) {
+
+                                    $("#title" + week.slice(0, 3) + j).val(title)
+                                    $("#contents" + week.slice(0, 3) + j).val(contents)
+                                    $("#insert" + week.slice(0, 3) + j).hide();
+                                    $("#edit" + week.slice(0, 3) + j).show();
+                                    $("#delete" + week.slice(0, 3) + j).show();
+
+                                    $("#" + week.slice(0, 3) + j).css("background-color", "#FDF5E6")
+                                    $("#week" + j).css("background-color", "#B0E0E6")
+
+
+                                }
+                            }
+
+
+                            // if id.slice(0,3)=="mon"(
+                            //
+                            // )
+                            // $("#post-url").val()
+                        }
+
                     }
+                })
 
-                }
-            })
-
-        }
-
-        function showday(id) {
-            id = id.split('k');
-            if ($("#weekday" + id[1]).css("display") == "flex") {
-                // post-box를 가리고
-                $("#weekday" + id[1]).hide();
-                $("#workhistorythu" + id[1]).hide();
-                $("#workhistoryfri" + id[1]).hide();
-                $("#workhistorysat" + id[1]).hide();
-                $("#workhistorysun" + id[1]).hide();
-                $("#workhistorymon" + id[1]).hide();
-                $("#workhistorytue" + id[1]).hide();
-                $("#workhistorywed" + id[1]).hide();
-            } else {
-                // 아니면(눈에 보이지 않으면) post-box를 펴라
-                $("#weekday" + id[1]).show();
             }
 
-
-        }
-
-        // --------------------------------YD------------------------------------
-        // --------------------------------YD------------------------------------
-        // --------------------------------YD------------------------------------
-
-        // --------------------------------SH------------------------------------
-        // --------------------------------SH------------------------------------
-        // --------------------------------SH------------------------------------
-
-        function canQA() {
-            window.location.reload();
-        }
-
-        function addQA(type, qa_uid = '') {
-            if (type == 'q') {
-                console.log('add question clicked')
-                console.log($("#qadd").css("display"))
-                if ($("#qadd").css("display") == 'none') {
-                    $(`#qadd`).show();
+            function showday(id) {
+                id = id.split('k');
+                if ($("#weekday" + id[1]).css("display") == "flex") {
+                    // post-box를 가리고
+                    $("#weekday" + id[1]).hide();
+                    $("#workhistorythu" + id[1]).hide();
+                    $("#workhistoryfri" + id[1]).hide();
+                    $("#workhistorysat" + id[1]).hide();
+                    $("#workhistorysun" + id[1]).hide();
+                    $("#workhistorymon" + id[1]).hide();
+                    $("#workhistorytue" + id[1]).hide();
+                    $("#workhistorywed" + id[1]).hide();
                 } else {
-                    $(`#qadd`).hide();
+                    // 아니면(눈에 보이지 않으면) post-box를 펴라
+                    $("#weekday" + id[1]).show();
                 }
-            } else {
-                console.log('add answer clicked')
-                console.log($("#" + "add" + qa_uid))
-                console.log($("#" + "add" + qa_uid).css("display"))
-                if ($("#" + "add" + qa_uid).css("display") == 'none') {
-                    $("#" + "add" + qa_uid).show();
+
+
+            }
+
+            // --------------------------------YD------------------------------------
+            // --------------------------------YD------------------------------------
+            // --------------------------------YD------------------------------------
+
+            // --------------------------------SH------------------------------------
+            // --------------------------------SH------------------------------------
+            // --------------------------------SH------------------------------------
+
+            function canQA() {
+                window.location.reload();
+            }
+
+            function addQA(type, qa_uid = '') {
+                if (type == 'q') {
+                    console.log('add question clicked')
+                    console.log($("#qadd").css("display"))
+                    if ($("#qadd").css("display") == 'none') {
+                        $(`#qadd`).show();
+                    } else {
+                        $(`#qadd`).hide();
+                    }
                 } else {
-                    $("#" + "add" + qa_uid).hide();
-                }
-            }
-
-        }
-
-        function addQARequest(type, qa_uid = '') {
-            if (type == 'q') {
-                content = $("#addquestiontext").val()
-            } else {
-                content = $("#addanswertext").val()
-            }
-            console.log(content, type)
-
-            $.ajax({
-                type: "POST",
-                url: `/qna/add`,
-                data: {'id_give': qa_uid, 'content_give': content, 'type_give': type},
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        alert("등록 성공");
-                        window.location.reload();
+                    console.log('add answer clicked')
+                    console.log($("#" + "add" + qa_uid))
+                    console.log($("#" + "add" + qa_uid).css("display"))
+                    if ($("#" + "add" + qa_uid).css("display") == 'none') {
+                        $("#" + "add" + qa_uid).show();
                     } else {
-                        alert(response["result"]);
+                        $("#" + "add" + qa_uid).hide();
                     }
                 }
-            })
-        }
 
-        function deleteQARequest(qa_uid, type) {
-            console.log(qa_uid)
-            console.log(type)
-            $.ajax({
-                type: "POST",
-                url: `/qna/delete`,
-                data: {'id_give': qa_uid, 'type_give': type},
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        alert("삭제 성공");
-                        window.location.reload();
-                    } else {
-                        alert(response["result"]);
-                    }
-                }
-            })
-        }
-
-        function modifyQARequest(type, qa_uid) {
-            console.log(type)
-            let content;
-            if (type == 'q') {
-                content = $('#' + 'mq' + qa_uid).val();
-            } else {
-                content = $('#' + 'ma' + qa_uid).val();
             }
-            console.log(qa_uid)
-            console.log(content)
-            $.ajax({
-                type: "POST",
-                url: `/qna/modify`,
-                data: {'id_give': qa_uid, 'content_give': content, 'type_give': type},
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        alert("수정 성공");
-                        window.location.reload();
-                    } else {
-                        alert(response["result"]);
-                    }
+
+            function addQARequest(type, qa_uid = '') {
+                if (type == 'q') {
+                    content = $("#addquestiontext").val()
+                } else {
+                    content = $("#addanswertext").val()
                 }
-            })
-        }
+                console.log(content, type)
 
-        function modifyQA(qa_uid, question, answer, userkey_q, userkey_a, type) {
+                $.ajax({
+                    type: "POST",
+                    url: `/qna/add`,
+                    data: {'id_give': qa_uid, 'content_give': content, 'type_give': type},
+                    success: function (response) { // 성공하면
+                        if (response["result"] == "success") {
+                            alert("등록 성공");
+                            window.location.reload();
+                        } else {
+                            alert(response["result"]);
+                        }
+                    }
+                })
+            }
 
-            if (type == 'q') {
-                console.log('q')
-                let card_html = `
+            function deleteQARequest(qa_uid, type) {
+                console.log(qa_uid)
+                console.log(type)
+                $.ajax({
+                    type: "POST",
+                    url: `/qna/delete`,
+                    data: {'id_give': qa_uid, 'type_give': type},
+                    success: function (response) { // 성공하면
+                        if (response["result"] == "success") {
+                            alert("삭제 성공");
+                            window.location.reload();
+                        } else {
+                            alert(response["result"]);
+                        }
+                    }
+                })
+            }
+
+            function modifyQARequest(type, qa_uid) {
+                console.log(type)
+                let content;
+                if (type == 'q') {
+                    content = $('#' + 'mq' + qa_uid).val();
+                } else {
+                    content = $('#' + 'ma' + qa_uid).val();
+                }
+                console.log(qa_uid)
+                console.log(content)
+                $.ajax({
+                    type: "POST",
+                    url: `/qna/modify`,
+                    data: {'id_give': qa_uid, 'content_give': content, 'type_give': type},
+                    success: function (response) { // 성공하면
+                        if (response["result"] == "success") {
+                            alert("수정 성공");
+                            window.location.reload();
+                        } else {
+                            alert(response["result"]);
+                        }
+                    }
+                })
+            }
+
+            function modifyQA(qa_uid, question, answer, userkey_q, userkey_a, type) {
+
+                if (type == 'q') {
+                    console.log('q')
+                    let card_html = `
              <div class="card" style="width: 100%;" id="${qa_uid}">
                  <div class="card-body">
                      <p>
@@ -482,11 +481,11 @@
                      </p>
                  </div>
              </div>`
-                console.log('#' + qa_uid)
-                $('#' + qa_uid).html(card_html);
-            } else {
-                console.log('a')
-                let card_html = `
+                    console.log('#' + qa_uid)
+                    $('#' + qa_uid).html(card_html);
+                } else {
+                    console.log('a')
+                    let card_html = `
              <div class="card" style="width: 100%;"id="${qa_uid}">
                  <div class="card-body">
                      <p>
@@ -505,242 +504,232 @@
                      </p>
                  </div>
              </div>`
-                console.log('#' + qa_uid)
-                $('#' + qa_uid).html(card_html);
+                    console.log('#' + qa_uid)
+                    $('#' + qa_uid).html(card_html);
+                }
             }
-        }
 
-        // --------------------------------SH------------------------------------
-        // --------------------------------SH------------------------------------
-        // --------------------------------SH------------------------------------
+            // --------------------------------SH------------------------------------
+            // --------------------------------SH------------------------------------
+            // --------------------------------SH------------------------------------
 
 
-    </script>
-</head>
-<body>
-<div class="wrapper">
-    <div class="header">
-        <div class="logo_nav">
-            <div class="login_logo"></div>
-        </div>
-        <div class="blank" style="height:8%"></div>
-        <div class="header-nav-bar">
-            <div class="nav-bar-contents">
-                <div class="login_status">{{cnt_status}} / {{cnt_user}}님 로그인</div>
-                <div class="blank" style="width:1%"></div>
-                <div class="blank" style="width:2%"></div>
-            </div>
-            <div class="logout" style="cursor: pointer" onclick="logout()"></div>
-        </div>
-    </div>
-    <div class="blank" style="height:4%"></div>
-    <div class="contents">
-        <div class="container_contents">
-            <!---------------SH------------------->
-            <!---------------SH------------------->
-            <!---------------SH------------------->
-            <div class="q_and_a">
-                <div class="content_name">
-                    <div>Q&A</div>
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="header">
+                <div class="logo_nav">
+                    <div class="login_logo"></div>
                 </div>
-                <div class="blank" style="height:1%"></div>
-                <button type="button" class="btn btn-primary btn-sm" id="addqbutton" }
-                        onclick="addQA('q')">
-                    질문하기
-                </button>
-                <div class="blank" style="height:1%"></div>
-                <div id="qadd" style="display: none">
-                    <form>
-                        <div class="form-group">
-                            <textarea class="form-control" id="addquestiontext" rows="2"></textarea>
-                            <button type="button" class="btn btn-primary btn-sm" id="addq" }
-                                    onclick="addQARequest('q')">
-                                완료
-                            </button>
-                            <button type="button" class="btn btn-primary btn-sm" id="canq" }
-                                    onclick="addQA('q')">
-                                취소
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="content_contents">
-
-                    {% for qna in qnas %}
-                    <div class="card" style="width: 100%;" id="{{qna['qa_uid']}}">
-                        <div class="card-body">
-                            <b><h5 class="card-text">{{qna['question']}}</h5></b><br>
-                            <h6 class="card-subtitle mb-2 text-muted">질문자 : {{qna['username_q']}}</h6>
-                            <button type="button" class="btn btn-primary btn-sm" button_number=q{{qna['qa_uid']}}
-                                    onclick="modifyQA('{{qna.qa_uid}}','{{qna.question}}','{{qna.answer}}','{{qna.username_q}}','{{qna.username_a}}', 'q')">
-                                수정
-                            </button>
-                            <button type="button" class="btn btn-primary btn-sm" button_number=dq{{qna['qa_uid']}}
-                                    onclick="deleteQARequest('{{qna.qa_uid}}','q')">
-                                삭제
-                            </button>
-                            {% if qna['answer'] %}
-                            <p> <h5 class="card-text">{{qna['answer']}}</h5><br>
-                            <h6 class="card-subtitle mb-2 text-muted">답변자 : {{qna['username_a']}}</h6>
-                            <button type="button" class="btn btn-primary btn-sm" button_number=a{{qna['qa_uid']}}
-                                    onclick="modifyQA('{{qna.qa_uid}}','\'{{qna.question}}\'','{{qna.answer}}','{{qna.username_q}}','{{qna.username_a}}', 'a')">
-                                수정
-                            </button>
-                            <button type="button" class="btn btn-primary btn-sm" button_number=da{{qna['qa_uid']}}
-                                    onclick="deleteQARequest('{{qna.qa_uid}}','a')">
-                                삭제
-                            </button>
-                            </p>
-                            {% else %}
-                            <button type="button" class="btn btn-primary btn-sm" onclick="addQA('a', '{{qa_uid}}')">답글
-                            </button>
-                            <p>
-                                <br>
-                            <div id="add{{qa_uid}}" style="display: none">
-                                <form>
-                                    <div class="form-group">
-                                        <textarea class="form-control" id="addanswertext" rows="2"></textarea>
-                                        <button type="button" class="btn btn-primary btn-sm" id="adda" }
-                                                onclick="addQARequest('a', '{{qna.qa_uid}}')">
-                                            완료
-                                        </button>
-                                        <button type="button" class="btn btn-primary btn-sm" id="cana" }
-                                                onclick="addQA('a', '{{qa_uid}}')">
-                                            취소
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                            </p>
-                            {% endif %}
-                        </div>
+                <div class="blank" style="height:8%"></div>
+                <div class="header-nav-bar">
+                    <div class="nav-bar-contents">
+                        <div class="login_status">{{cnt_status}} / {{cnt_user}}님 로그인</div>
+                        <div class="blank" style="width:1%"></div>
+                        <div class="blank" style="width:2%"></div>
                     </div>
-                    {% endfor %}
+                    <div class="logout" style="cursor: pointer" onclick="logout()"></div>
                 </div>
             </div>
-            <!---------------SH------------------->
-            <!---------------SH------------------->
-            <!---------------SH------------------->
-
-            <!---------------JH------------------->
-            <!---------------JH------------------->
-            <!---------------JH------------------->
-
-            <div class="info">
-                <div id="info_add_form">
-                    <div class="info_add_title">
-                        <div>INFO UPLOAD</div>
-                    </div>
-                    <div class="blank" style="height:10%"></div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">TITLE</span>
-                        <input id="info_form_title" type="text" class="form-control"
-                               aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">URL</span>
-                        <input id="info_form_url" type="text" class="form-control"
-                               aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">IMAGE</span>
-                        <input id="info_form_img_url" type="text" class="form-control"
-                               aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">CONTENTS</span>
-                        <input id="info_form_contents" type="text" class="form-control"
-                               aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <div style="width:100%; display:flex; flex-direction: row; justify-content: center">
-                        <button id="info_add_submit" type="button" class="btn btn-primary btn-sm btn-info">등록
+            <div class="blank" style="height:4%"></div>
+            <div class="contents">
+                <div class="container_contents">
+                    <!---------------SH------------------->
+                    <!---------------SH------------------->
+                    <!---------------SH------------------->
+                    <div class="q_and_a">
+                        <div class="content_name">
+                            <div>Q&A</div>
+                        </div>
+                        <div class="blank" style="height:1%"></div>
+                        <button type="button" class="btn btn-primary btn-sm" id="addqbutton" }
+                                onclick="addQA('q')">
+                            질문하기
                         </button>
-                        <div style="width: 3%"></div>
-                        <button id="info_add_cancel" type="button" class="btn btn-secondary btn-sm btn-info">
-                            삭제
-                        </button>
-                    </div>
-                </div>
-                <div class="content_name">
-                    <div style="width: 10%"></div>
-                    <div style="width: 80%">INFOMATION</div>
-                    <div id="info_add" class="info_add">+</div>
-                    <div style="width: 5%"></div>
-                </div>
-                <div class="blank" style="height:1%"></div>
-                <div class="content_contents">
-                    {% set infos = infos_package[0] %}
-                    {% set infosFinduser = infos_package[1] %}
-                    {% for info in infos %}
-                    {% set index = loop.index-1|int %}
-                    <!--                            <div id="" class="card" style="width: 100%">-->
-                    <!--                                <div class="card-header">-->
-                    <!--                                    {{info["title"]}}-->
-                    <!--                                    {{index}}-->
-                    <!--                                </div>-->
-                    <!--                                <div class="card-body">-->
-                    <!--                                    <blockquote class="blockquote mb-0">-->
-                    <!--                                        {{info["contents"]}}-->
-                    <!--                                        <footer class="blockquote-footer">-->
-                    <!--                                            {{ infosFinduser[index]['name'] }}-->
-                    <!--                                        </footer>-->
-                    <!--                                    </blockquote>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <div class="card mb-3" style="width: 100%;">
-                        <div class="row g-0" style="width: 90%;">
-                            <div class="col-md-4"
-                                 style="background-image: url('https://cdn.gamemeca.com/data_center/219/863/20201013173619.jpg')">
-                            </div>
-                            <div class="col-md-8">
+                        <div class="blank" style="height:1%"></div>
+                        <div id="qadd" style="display: none">
+                            <form>
+                                <div class="form-group">
+                                    <textarea class="form-control" id="addquestiontext" rows="2"></textarea>
+                                    <button type="button" class="btn btn-primary btn-sm" id="addq" }
+                                            onclick="addQARequest('q')">
+                                        완료
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="canq" }
+                                            onclick="addQA('q')">
+                                        취소
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="content_contents">
+
+                            {% for qna in qnas %}
+                            <div class="card" style="width: 100%;" id="{{qna['qa_uid']}}">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{info["title"]}}</h5>
-                                    <p class="card-text">{{info["contents"]}}</p>
-                                    <p class="card-text"><small class="text-muted">
-                                        작성자 : {{infosFinduser[index]['name'] }}</small></p>
+                                    <b><h5 class="card-text">{{qna['question']}}</h5></b><br>
+                                    <h6 class="card-subtitle mb-2 text-muted">질문자 : {{qna['username_q']}}</h6>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            button_number=q{{qna['qa_uid']}}
+                                            onclick="modifyQA('{{qna.qa_uid}}','{{qna.question}}','{{qna.answer}}','{{qna.username_q}}','{{qna.username_a}}', 'q')">
+                                        수정
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            button_number=dq{{qna['qa_uid']}}
+                                            onclick="deleteQARequest('{{qna.qa_uid}}','q')">
+                                        삭제
+                                    </button>
+                                    {% if qna['answer'] %}
+                                    <p> <h5 class="card-text">{{qna['answer']}}</h5><br>
+                                    <h6 class="card-subtitle mb-2 text-muted">답변자 : {{qna['username_a']}}</h6>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            button_number=a{{qna['qa_uid']}}
+                                            onclick="modifyQA('{{qna.qa_uid}}','\'{{qna.question}}\'','{{qna.answer}}','{{qna.username_q}}','{{qna.username_a}}', 'a')">
+                                        수정
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            button_number=da{{qna['qa_uid']}}
+                                            onclick="deleteQARequest('{{qna.qa_uid}}','a')">
+                                        삭제
+                                    </button>
+                                    </p>
+                                    {% else %}
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            onclick="addQA('a', '{{qa_uid}}')">답글
+                                    </button>
+                                    <p>
+                                        <br>
+                                    <div id="add{{qa_uid}}" style="display: none">
+                                        <form>
+                                            <div class="form-group">
+                                                <textarea class="form-control" id="addanswertext" rows="2"></textarea>
+                                                <button type="button" class="btn btn-primary btn-sm" id="adda" }
+                                                        onclick="addQARequest('a', '{{qna.qa_uid}}')">
+                                                    완료
+                                                </button>
+                                                <button type="button" class="btn btn-primary btn-sm" id="cana" }
+                                                        onclick="addQA('a', '{{qa_uid}}')">
+                                                    취소
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    </p>
+                                    {% endif %}
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% endfor %}
+                    <!---------------SH------------------->
+                    <!---------------SH------------------->
+                    <!---------------SH------------------->
+
+                    <!---------------JH------------------->
+                    <!---------------JH------------------->
+                    <!---------------JH------------------->
+
+                    <div class="info">
+                        <div id="info_add_form">
+                            <div class="info_add_title">
+                                <div>INFO UPLOAD</div>
+                            </div>
+                            <div class="blank" style="height:10%"></div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">TITLE</span>
+                                <input id="info_form_title" type="text" class="form-control"
+                                       aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">URL</span>
+                                <input id="info_form_url" type="text" class="form-control"
+                                       aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">IMAGE</span>
+                                <input id="info_form_img_url" type="text" class="form-control"
+                                       aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">CONTENTS</span>
+                                <input id="info_form_contents" type="text" class="form-control"
+                                       aria-label="Sizing example input"
+                                       aria-describedby="inputGroup-sizing-default">
+                            </div>
+                            <div style="width:100%; display:flex; flex-direction: row; justify-content: center">
+                                <button id="info_add_submit" type="button" class="btn btn-primary btn-sm btn-info">등록
+                                </button>
+                                <div style="width: 3%"></div>
+                                <button id="info_add_cancel" type="button" class="btn btn-secondary btn-sm btn-info">
+                                    삭제
+                                </button>
+                            </div>
+                        </div>
+                        <div class="content_name">
+                            <div style="width: 10%"></div>
+                            <div style="width: 80%">INFOMATION</div>
+                            <div id="info_add" class="info_add">+</div>
+                            <div style="width: 5%"></div>
+                        </div>
+                        <div class="blank" style="height:1%"></div>
+                        <div class="content_contents">
+                            {% set infos = infos_package[0] %}
+                            {% set infosFinduser = infos_package[1] %}
+                            {% for info in infos %}
+                            {% set index = loop.index-1|int %}
+                            <div class="card mb-3" style="width: 100%; display: flex; justify-content: center; flex-direction: row">
+                                <div class="col-md-4"
+                                     style="width:40%; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0">
+                                    <img style="object-fit: cover; width: 100%;" src="{{info['image_url']}}">
+                                </div>
+                                <div class="col-md-8" style="width:60%" ;>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{info["title"]}}</h5>
+                                        <p class="card-text">{{info["contents"]}}</p>
+                                        <p class="card-text"><small class="text-muted">
+                                            작성자 : {{infosFinduser[index]['name'] }}</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!---------------JH------------------->
+                    <!---------------JH------------------->
+                    <!---------------JH------------------->
+
+                    <!---------------YD------------------->
+                    <!---------------YD------------------->
+                    <!---------------YD------------------->
+                    <div class="undefined">
+                        <div class="content_name">
+                            <div>DEV HISTORY</div>
+                        </div>
+                        <div class="blank" style="height:1%"></div>
+                        <div class="content_contents">
+                            <div style="width: 100%" id="develophistory" class="list-group"></div>
+                        </div>
+                    </div>
+                    <!---------------YD------------------->
+                    <!---------------YD------------------->
+                    <!---------------YD------------------->
                 </div>
             </div>
-
-            <!---------------JH------------------->
-            <!---------------JH------------------->
-            <!---------------JH------------------->
-
-            <!---------------YD------------------->
-            <!---------------YD------------------->
-            <!---------------YD------------------->
-            <div class="undefined">
-                <div class="content_name">
-                    <div>DEV HISTORY</div>
-                </div>
-                <div class="blank" style="height:1%"></div>
-                <div class="content_contents">
-                    <div style="width: 100%" id="develophistory" class="list-group"></div>
+            <div class="blank" style="height:10%"></div>
+            <div class="footer">
+                <div class="signature" style="color:white;">
+                    <strong>Copyright 2020. 7조 김영동/최성현/조정훈. All rights reserved</strong>
                 </div>
             </div>
-            <!---------------YD------------------->
-            <!---------------YD------------------->
-            <!---------------YD------------------->
         </div>
-    </div>
-    <div class="blank" style="height:10%"></div>
-    <div class="footer">
-        <div class="signature" style="color:white;">
-            <strong>Copyright 2020. 7조 김영동/최성현/조정훈. All rights reserved</strong>
-        </div>
-    </div>
-</div>
-<script>
-    showDevelopHistory('init');
-    init();
-</script>
-</body>
+        <script>
+            showDevelopHistory('init');
+            init();
+        </script>
+    </body>
 </html>

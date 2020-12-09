@@ -220,19 +220,16 @@ def session_test():
         else:
             return jsonify({"result": "일치하는 유저가 없습니다."})
 
-
 @app.route('/logout')
 def logout():
     session.pop('userkey', None)
     print('로그아웃 되었습니다.')
     return redirect(url_for('home'))
 
-
 @app.before_request
 def make_session_permanent():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=5)
-
 
 # ----------------------------JH-----------------------------------
 # ----------------------------JH-----------------------------------
