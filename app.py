@@ -170,6 +170,17 @@ def postInfo():
     return jsonify({"result": "success"})
 
 
+@app.route('/postview', methods=['POST'])
+def postView():
+    url_receive = request.form['info_click_uid_give']
+    view_receive = request.form['cnt_view']
+    added_view = int(view_receive) + 1
+
+    db.info.update_one({"uid": url_receive}, {"$set": {"view": added_view}})
+
+    return jsonify({"result": "success"})
+
+
 @app.route('/signup', methods=['POST'])
 def signUp():
     id_receive = request.form["id_give"]
@@ -220,16 +231,19 @@ def session_test():
         else:
             return jsonify({"result": "일치하는 유저가 없습니다."})
 
+
 @app.route('/logout')
 def logout():
     session.pop('userkey', None)
     print('로그아웃 되었습니다.')
     return redirect(url_for('home'))
 
+
 @app.before_request
 def make_session_permanent():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=5)
+
 
 # ----------------------------JH-----------------------------------
 # ----------------------------JH-----------------------------------
