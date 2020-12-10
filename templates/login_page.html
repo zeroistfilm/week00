@@ -7,6 +7,10 @@
               integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
               crossorigin="anonymous">
         <link rel="stylesheet" href="../static/css/login_page.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Condensed:wght@700&display=swap"
+              rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Jua&family=Song+Myung&display=swap" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
@@ -34,6 +38,28 @@
                     }
                 })
             }
+
+            function btn_highlight(){
+                let login_tap_btn = document.getElementById("login_btn");
+                let signup_tap_btn = document.getElementById("signup_btn");
+
+                login_tap_btn.addEventListener("click", function (){
+                    login_tap_btn.style.backgroundColor = "blue";
+                    login_tap_btn.style.color = "white";
+                    signup_tap_btn.style.backgroundColor = "white";
+                    signup_tap_btn.style.color = "blue";
+                });
+
+                signup_tap_btn.addEventListener("click", function (){
+                    signup_tap_btn.style.backgroundColor = "blue";
+                    signup_tap_btn.style.color = "white";
+                    login_tap_btn.style.backgroundColor = "white";
+                    login_tap_btn.style.color = "blue";
+                });
+
+            }
+
+
         </script>
 
     </head>
@@ -43,8 +69,8 @@
             <div class="blank"></div>
             <div class="form_btn">
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                    <label id="login_btn" class="btn btn-outline-primary">로그인</label>
-                    <label id='signup_btn' class="btn btn-outline-primary">회원가입</label>
+                    <label id="login_btn" class="btn btn-outline-primary login_toggle_btn1">로그인 창</label>
+                    <label id='signup_btn' class="btn btn-outline-primary login_toggle_btn2">회원가입 창</label>
                 </div>
             </div>
 
@@ -147,6 +173,8 @@
                     }
                 })
             });
+
+            btn_highlight();
         </script>
     </body>
 </html>
