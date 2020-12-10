@@ -3,7 +3,7 @@ import time
 import jwt
 import flask
 from flask import Flask, render_template, jsonify, request, session, escape, redirect, flash, url_for
-from pymongo import MongoClient  # pymongo를 임포트 하기(패키지 인스톨 먼저 해야겠죠?)
+from    pymongo import MongoClient  # pymongo를 임포트 하기(패키지 인스톨 먼저 해야겠죠?)
 
 app = Flask(__name__)
 
@@ -12,7 +12,6 @@ client = MongoClient('mongodb://test:test@54.180.91.148', 27017)
 # db = client.dbsparta  # 'dbsparta'라는 이름의 db를 만들거나 사용합니다.
 db = client.jungglebook
 app.secret_key = b"!@#$1234"
-
 
 # ----------------------------SH-----------------------------------
 # ----------------------------SH-----------------------------------
@@ -68,14 +67,20 @@ def modifyQNA():
 def deleteQNA():
     id_receive = request.form['id_give']
     type_receive = request.form['type_give']
+    user_key = session['userkey']
+    user = db.userDB.find_one({'key': str(user_key)})
+    qna = db.QandA.find_one({'qa_uid': str(id_receive)})
 
     if type_receive == 'q':
-        print('q')
-        db.QandA.delete_one({'qa_uid': str(id_receive)})
+        if (qna['userkey_q'] == str(user_key)):
+            db.QandA.delete_one({'qa_uid': str(id_receive)})
+        else:
+            return jsonify({"result": "작성자만 글을 수정할 수 있습니다."})
     else:
-        print('a')
-        db.QandA.update_one({'qa_uid': str(id_receive)}, {'$set': {'answer': '', 'userkey_a': ''}})
-
+        if (qna['userkey_a'] == str(user_key)):
+            db.QandA.update_one({'qa_uid': str(id_receive)}, {'$set': {'answer': '', 'userkey_a': ''}})
+        else:
+            return jsonify({"result": "작성자만 글을 수정할 수 있습니다."})
     return jsonify({"result": "success"})
 
 
