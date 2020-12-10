@@ -13,7 +13,6 @@ client = MongoClient('mongodb://test:test@54.180.91.148', 27017)
 db = client.jungglebook
 app.secret_key = b"!@#$1234"
 
-
 # ----------------------------SH-----------------------------------
 # ----------------------------SH-----------------------------------
 # ----------------------------SH-----------------------------------
@@ -68,14 +67,20 @@ def modifyQNA():
 def deleteQNA():
     id_receive = request.form['id_give']
     type_receive = request.form['type_give']
+    user_key = session['userkey']
+    user = db.userDB.find_one({'key': str(user_key)})
+    qna = db.QandA.find_one({'qa_uid': str(id_receive)})
 
     if type_receive == 'q':
-        print('q')
-        db.QandA.delete_one({'qa_uid': str(id_receive)})
+        if (qna['userkey_q'] == str(user_key)):
+            db.QandA.delete_one({'qa_uid': str(id_receive)})
+        else:
+            return jsonify({"result": "작성자만 글을 수정할 수 있습니다."})
     else:
-        print('a')
-        db.QandA.update_one({'qa_uid': str(id_receive)}, {'$set': {'answer': '', 'userkey_a': ''}})
-
+        if (qna['userkey_a'] == str(user_key)):
+            db.QandA.update_one({'qa_uid': str(id_receive)}, {'$set': {'answer': '', 'userkey_a': ''}})
+        else:
+            return jsonify({"result": "작성자만 글을 수정할 수 있습니다."})
     return jsonify({"result": "success"})
 
 
@@ -100,7 +105,6 @@ def loadhome():
     if "userkey" in session:
         qnas = list(db.QandA.find({}, {'_id': False}))
         for idx, qna in enumerate(qnas):
-
             try:
                 key_a = qna['userkey_a']
                 key_q = qna['userkey_q']
@@ -110,12 +114,12 @@ def loadhome():
                 username_q = user_q['name']
                 qnas[idx]['username_a'] = username_a
                 qnas[idx]['username_q'] = username_q
-
             except:
                 key_q = qna['userkey_q']
                 user_q = db.userDB.find_one({'key': str(key_q)})
                 username_q = user_q['name']
                 qnas[idx]['username_q'] = username_q
+
         cnt_user = db.userDB.find_one({'key': session['userkey']})
         crn_user_name = cnt_user['name']
         cnt_user_status = cnt_user['usertype']
@@ -135,13 +139,22 @@ def loadhome():
             if user != None:
                 infosFinduser.append(user)
 
-        print(len(infos))
-        print(len(infosFinduser))
-
         infos_package = [infos, infosFinduser]
 
+        # =============YD===================
+        # =============YD===================
+        # =============YD===================
+        allusers=user = list(db.userDB.find({},{"_id": False}))
+        print(allusers)
+        # =============YD===================
+        # =============YD===================
+        # =============YD===================
+
+
+
+
         return render_template('main.html', qnas=qnas, infos_package=infos_package, cnt_user=crn_user_name,
-                               cnt_status=cnt_status)
+                               cnt_status=cnt_status, allusers=allusers)
     else:
         return render_template('login_page.html')
 
@@ -152,6 +165,8 @@ def postInfo():
     info_title_receive = request.form["info_title_give"]
     info_contents_receive = request.form["info_contents_give"]
     info_url_receive = request.form["info_url_give"]
+    info_image_url_receive = request.form["info_image_url_give"]
+
     info_uid = "info." + str(now.tm_year) + "." + str(now.tm_mon) + "." + str(now.tm_mday) + "." + str(
         now.tm_hour) + "." + str(now.tm_min) + "." + str(now.tm_sec)
 
@@ -159,11 +174,23 @@ def postInfo():
         "title": info_title_receive,
         "contents": info_contents_receive,
         "url": info_url_receive,
+        "image_url": info_image_url_receive,
         "uid": info_uid,
         "userkey": session["userkey"]
     }
 
     db.info.insert_one(info)
+
+    return jsonify({"result": "success"})
+
+
+@app.route('/postview', methods=['POST'])
+def postView():
+    url_receive = request.form['info_click_uid_give']
+    view_receive = request.form['cnt_view']
+    added_view = int(view_receive) + 1
+
+    db.info.update_one({"uid": url_receive}, {"$set": {"view": added_view}})
 
     return jsonify({"result": "success"})
 
@@ -256,19 +283,50 @@ def post_develophistory():
 
 @app.route('/develophistory', methods=['GET'])
 def read_develophistory():
-    # 1. mongoDB에서 _id 값을 제외한 모든 데이터 조회해오기 (Read)
-    # user = db.userDB.find_one({'key': str(key)})
 
-    historys = list(db.history.find({}, {'_id': 0}))
+    keyparm = request.args.get("key")
+    if keyparm:
+        userKey=keyparm
+    else:
+        userKey = session['userkey']
+
+
+    historys = list(db.history.find({'userkey': userKey},{"_id": False}))
+
+    syllabus = list(db.syllabus.find({},{"_id": False}))
+
+
+
+    return jsonify({'result': 'success', 'historys': historys,'syllabus':syllabus,'userKey':userKey})
+
+
+@app.route('/develophistory/edit', methods=['POST'])
+def edit_develophistory():
+    title_receive = request.form['title_give']  # 클라이언트로부터 url을 받는 부분
+    contents_receive = request.form['contents_give']  # 클라이언트로부터
+    id_receive = request.form['id_give']  #
+
     userKey = session['userkey']
 
-    print(historys)
-    # 2. articles라는 키 값으로 article 정보 보내주기
-    return jsonify({'result': 'success', 'historys': historys})
+    db.history.remove({'id': id_receive})
+    history = {'id': id_receive, 'title': title_receive, 'contents': contents_receive, 'userkey': userKey}
+    db.history.insert_one(history)
+
+    return jsonify({'result': 'success'})
+
+
+@app.route('/develophistory/delete', methods=['POST'])
+def delete_develophistory():
+    id_receive = request.form['id_give']  #
+    userKey = session['userkey']
+    db.history.remove({'id': id_receive})
+
+    return jsonify({'result': 'success'})
 
 
 # ----------------------------YD-----------------------------------
 # ----------------------------YD-----------------------------------
 # ----------------------------YD-----------------------------------
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
