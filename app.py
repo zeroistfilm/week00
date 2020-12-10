@@ -134,9 +134,6 @@ def loadhome():
             if user != None:
                 infosFinduser.append(user)
 
-        print(len(infos))
-        print(len(infosFinduser))
-
         infos_package = [infos, infosFinduser]
 
         return render_template('main.html', qnas=qnas, infos_package=infos_package, cnt_user=crn_user_name,

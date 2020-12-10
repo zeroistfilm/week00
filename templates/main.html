@@ -63,10 +63,10 @@
                         },
                         success: function (response) { // 성공하면
                             if (response["result"] == "success") {
-                                alert("등록 성공");
+                                alert("포스팅 되었습니다.");
                                 form.style.display = "none";
                             } else {
-                                alert("오류 발생");
+                                alert("포스팅 오류");
                             }
                         }
                     });
@@ -83,13 +83,13 @@
                     url: `/postview`,
                     data: {
                         'info_click_uid_give': uid,
-                        'cnt_view' : view
+                        'cnt_view': view
                     },
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
                             window.location.reload();
                         } else {
-                            alert("오류 발생");
+                            alert("조회수 갱신 오류");
                         }
                     }
                 });
@@ -134,11 +134,9 @@
                     data: {title_give: title, contents_give: contents, id_give: id}, // 데이터를 주는 방법
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
-                            alert("포스팅 성공!");
                             // 3. 성공 시 페이지 새로고침하기
                             window.location.reload();
                         } else {
-                            alert("서버 오류!")
                         }
                     }
                 });
@@ -156,11 +154,9 @@
                     data: {title_give: title, contents_give: contents, id_give: id}, // 데이터를 주는 방법
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
-                            alert("포스팅 성공!");
                             // 3. 성공 시 페이지 새로고침하기
                             window.location.reload();
                         } else {
-                            alert("서버 오류!")
                         }
                     }
                 })
@@ -178,7 +174,6 @@
                     data: {id_give: id}, // 데이터를 주는 방법
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
-                            alert("포스팅 성공!");
                             // 3. 성공 시 페이지 새로고침하기
                             window.location.reload();
                         } else {
@@ -204,17 +199,12 @@
                     url: path, // /memo라는 url에 요청하겠다.
                     data: {}, // 데이터를 주는 방법
                     success: function (response) {
-
-
                         let historys = response["historys"];
                         console.log(historys)
-
-
                         let temphtml = ``
                         let tempid = 0
 
                         for (let i = 1; i < 19; i++) {
-
                             temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
                         <ul  style="display:none;"  id="weekday${i}"class="list-group list-group-horizontal">
                               <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">목</li>
@@ -342,21 +332,11 @@
 
                                     $("#" + week.slice(0, 3) + j).css("background-color", "#FDF5E6")
                                     $("#week" + j).css("background-color", "#B0E0E6")
-
-
                                 }
                             }
-
-
-                            // if id.slice(0,3)=="mon"(
-                            //
-                            // )
-                            // $("#post-url").val()
                         }
-
                     }
-                })
-
+                });
             }
 
             function showday(id) {
@@ -375,8 +355,6 @@
                     // 아니면(눈에 보이지 않으면) post-box를 펴라
                     $("#weekday" + id[1]).show();
                 }
-
-
             }
 
             // --------------------------------YD------------------------------------
@@ -410,7 +388,6 @@
                         $("#" + "add" + qa_uid).hide();
                     }
                 }
-
             }
 
             function addQARequest(type, qa_uid = '') {
@@ -718,11 +695,12 @@
                                     <div class="card-body">
                                         <h5 class="card-title">{{info["title"]}}</h5>
                                         <p class="card-text">{{info["contents"]}}</p>
-                                        <p class="card-text" style="text-align: right; margin: 0"><small class="text-muted">
+                                        <p class="card-text" style="text-align: right; margin: 0"><small
+                                                class="text-muted">
                                             작성자 : {{infosFinduser[index]['name'] }} / 조회수 : {{view}}</small></p>
                                         <div style="height: fit-content; text-align: right">
-                                            {{time_list[1]}}.{{time_list[2]}}.{{time_list[3]}}
-                                            {{time_list[4]}}:{{time_list[5]}}
+                                            <small>작성시간 : {{time_list[1]}}.{{time_list[2]}}.{{time_list[3]}}
+                                                {{time_list[4]}}:{{time_list[5]}}</small>
                                         </div>
                                     </div>
                                 </div>
