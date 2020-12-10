@@ -136,8 +136,20 @@ def loadhome():
 
         infos_package = [infos, infosFinduser]
 
+        # =============YD===================
+        # =============YD===================
+        # =============YD===================
+        allusers=user = list(db.userDB.find({},{"_id": False}))
+        print(allusers)
+        # =============YD===================
+        # =============YD===================
+        # =============YD===================
+
+
+
+
         return render_template('main.html', qnas=qnas, infos_package=infos_package, cnt_user=crn_user_name,
-                               cnt_status=cnt_status)
+                               cnt_status=cnt_status, allusers=allusers)
     else:
         return render_template('login_page.html')
 
@@ -266,15 +278,21 @@ def post_develophistory():
 
 @app.route('/develophistory', methods=['GET'])
 def read_develophistory():
+
     keyparm = request.args.get("key")
     if keyparm:
-        userKey = keyparm
+        userKey=keyparm
     else:
         userKey = session['userkey']
 
-    historys = list(db.history.find({'userkey': userKey}, {"_id": False}))
 
-    return jsonify({'result': 'success', 'historys': historys})
+    historys = list(db.history.find({'userkey': userKey},{"_id": False}))
+
+    syllabus = list(db.syllabus.find({},{"_id": False}))
+
+
+
+    return jsonify({'result': 'success', 'historys': historys,'syllabus':syllabus,'userKey':userKey})
 
 
 @app.route('/develophistory/edit', methods=['POST'])

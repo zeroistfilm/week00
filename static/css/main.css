@@ -309,6 +309,9 @@ body {
     background-repeat: no-repeat;
 }
 
+.list-group-item-action{
+    text-align: center;
+}
 .footer {
     display: flex;
     justify-content: center;

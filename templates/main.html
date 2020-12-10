@@ -105,8 +105,8 @@
 
 
             function developHistoryPut(id, parentsid) {
-                console.log(id)
-                console.log($("#workhistory" + id).css("display"))
+                // console.log(id)
+                // console.log($("#workhistory" + id).css("display"))
                 $("#workhistorymon" + id.slice(3, 5)).hide();
                 $("#workhistorytue" + id.slice(3, 5)).hide();
                 $("#workhistorywed" + id.slice(3, 5)).hide();
@@ -174,6 +174,7 @@
                     data: {id_give: id}, // 데이터를 주는 방법
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
+                            alert("포스팅 성공!");
                             // 3. 성공 시 페이지 새로고침하기
                             window.location.reload();
                         } else {
@@ -183,29 +184,64 @@
                 })
             }
 
-            function showDevelopHistory(key) {
+        var userkey = "";
+        function showDevelopHistory(key) {
 
-                $("#develophistory").empty();
-                let path = null
-                if (key == "init") {
-                    path = "/develophistory"
-                } else {
-                    path = "/develophistory?key=" + key
-                }
+            $("#develophistory").empty();
+            let path =null
+            if(key=="init"){
+                path ="/develophistory"
 
 
-                $.ajax({
-                    type: "GET", // POST 방식으로 요청하겠다.
-                    url: path, // /memo라는 url에 요청하겠다.
-                    data: {}, // 데이터를 주는 방법
-                    success: function (response) {
-                        let historys = response["historys"];
-                        console.log(historys)
-                        let temphtml = ``
-                        let tempid = 0
+            }else {
+                path="/develophistory?key="+key
+            }
 
-                        for (let i = 1; i < 19; i++) {
-                            temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}</a>
+
+            $.ajax({
+                type: "GET", // POST 방식으로 요청하겠다.
+                url: path, // /memo라는 url에 요청하겠다.
+                data: {}, // 데이터를 주는 방법
+                success: function (response) {
+
+
+                    let historys = response["historys"];
+                    // console.log(historys)
+
+                    let temphtml = ``
+                    let tempid = 0
+
+                    let syllabus= response["syllabus"];
+                    // console.log(syllabus)
+
+                    //
+                    week_desc=[]
+                    week_desc.push("")
+                    week_desc.push("알고리즘 기초, 정렬")
+                    week_desc.push("스택, 큐, 링크드리스트")
+                    week_desc.push("BFS, DFS")
+                    week_desc.push("동적 프로그래밍")
+                    week_desc.push("B+트리 프로젝트")
+                    week_desc.push("웹서버 만들기(C++)")
+                    week_desc.push("웹서버 만들기(C++)")
+                    week_desc.push("OS 프로젝트 (핀토스)")
+                    week_desc.push("OS 프로젝트 (핀토스)")
+                    week_desc.push("OS 프로젝트 (핀토스)")
+                    week_desc.push("OS 프로젝트 (핀토스)")
+                    week_desc.push("OS 프로젝트 (핀토스)")
+                    week_desc.push("OS 프로젝트 (핀토스)")
+                    week_desc.push("프로젝트 기획")
+                    week_desc.push("프로젝트 개발")
+                    week_desc.push("프로젝트 개발")
+                    week_desc.push("프로젝트 개발")
+                    week_desc.push("프로젝트 런칭")
+
+
+
+                    for (let i = 1; i < 19; i++) {
+                        // console.log(${syllabus[i]["week_desc"]});
+                        let desc= syllabus[i]
+                        temphtml += `<a id="week${i}"  href="#" class="list-group-item list-group-item-action" onclick="showday(id)">week${i}  ${week_desc[i]}</a>
                         <ul  style="display:none;"  id="weekday${i}"class="list-group list-group-horizontal">
                               <li id="thu${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">목</li>
                               <li id="fri${i}" class="list-group-item list-group-item-action" onclick="developHistoryPut(id,this.parentNode.id)">금</li>
@@ -217,11 +253,11 @@
                         </ul>
                             <ur id="workhistorythu${i}" style="display: none;">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">thu title</label>
+                                    <label for="exampleFormControlInput1" class="form-label">THU Title</label>
                                     <textarea id="titlethu${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                                 <div class="mbz-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <label for="exampleFormControlTextarea1" class="form-label">Contents</label>
                                     <textarea id="contentsthu${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                 <button id="insertthu${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
@@ -232,11 +268,11 @@
 
                             <ur id="workhistoryfri${i}" style="display: none;">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">fri title</label>
+                                    <label for="exampleFormControlInput1" class="form-label">FRI Title</label>
                                     <textarea id="titlefri${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                                 <div class="mbz-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <label for="exampleFormControlTextarea1" class="form-label">Contents</label>
                                     <textarea id="contentsfri${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                 <button id="insertfri${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
@@ -245,11 +281,11 @@
                             </ur>
                             <ur id="workhistorysat${i}" style="display: none;">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">sat title</label>
+                                    <label for="exampleFormControlInput1" class="form-label">SAT Title</label>
                                     <textarea id="titlesat${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                                 <div class="mbz-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <label for="exampleFormControlTextarea1" class="form-label">Contents</label>
                                     <textarea id="contentssat${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                 <button id="insertsat${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
@@ -258,11 +294,11 @@
                             </ur>
                             <ur id="workhistorysun${i}" style="display: none;">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">sun title</label>
+                                    <label for="exampleFormControlInput1" class="form-label">SUN Title</label>
                                     <textarea id="titlesun${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                                 <div class="mbz-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <label for="exampleFormControlTextarea1" class="form-label">Contents</label>
                                     <textarea id="contentssun${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                 <button id="insertsun${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
@@ -271,11 +307,11 @@
                             </ur>
                             <ur id="workhistorymon${i}" style="display: none;">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">mon title</label>
+                                    <label for="exampleFormControlInput1" class="form-label">MON Title</label>
                                     <textarea id="titlemon${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                                 <div class="mbz-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <label for="exampleFormControlTextarea1" class="form-label">Contents</label>
                                     <textarea id="contentsmon${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                 <button id="insertmon${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
@@ -284,11 +320,11 @@
                             </ur>
                             <ur id="workhistorytue${i}" style="display: none;">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">tue title</label>
+                                    <label for="exampleFormControlInput1" class="form-label">TUE Title</label>
                                     <textarea id="titletue${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                                 <div class="mbz-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <label for="exampleFormControlTextarea1" class="form-label">Contents</label>
                                     <textarea id="contentstue${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                 <button id="inserttue${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
@@ -297,11 +333,11 @@
                             </ur>
                             <ur id="workhistorywed${i}" style="display: none;">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">wed title</label>
+                                    <label for="exampleFormControlInput1" class="form-label">WED Title</label>
                                     <textarea id="titlewed${i}" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                                 <div class="mbz-3">
-                                    <label for="exampleFormControlTextarea1" class="form-label">contents</label>
+                                    <label for="exampleFormControlTextarea1" class="form-label">Contents</label>
                                     <textarea id="contentswed${i}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                 <button id="insertwed${i}" type="button" class="btn btn-outline-primary" onclick="insertcontents(this.parentNode.id)">등록</button>
@@ -330,14 +366,58 @@
                                     $("#edit" + week.slice(0, 3) + j).show();
                                     $("#delete" + week.slice(0, 3) + j).show();
 
-                                    $("#" + week.slice(0, 3) + j).css("background-color", "#FDF5E6")
-                                    $("#week" + j).css("background-color", "#B0E0E6")
-                                }
+                                $("#"+week.slice(0,3)+j).css("background-color","#FDF5E6")
+                                $("#week"+j).css("background-color","#B0E0E6")
+
+
+
+
                             }
                         }
+
+                        }
+
+
+                    if (key == 'init') {
+
+                        userkey = response['userKey'];
+                    } else if (userkey != key) {
+                        for (let i = 1; i < 19; i++) {
+                            $("#insert" + "mon" + i).hide();
+                            $("#edit" + "mon" + i).hide();
+                            $("#delete" + "mon" + i).hide();
+                            $("#insert" + "tue" + i).hide();
+                            $("#edit" + "tue" + i).hide();
+                            $("#delete" + "tue" + i).hide();
+                            $("#insert" + "wed" + i).hide();
+                            $("#edit" + "wed" + i).hide();
+                            $("#delete" + "wed" + i).hide();
+                            $("#insert" + "thu" + i).hide();
+                            $("#edit" + "thu" + i).hide();
+                            $("#delete" + "thu" + i).hide();
+                            $("#insert" + "fri" + i).hide();
+                            $("#edit" + "fri" + i).hide();
+                            $("#delete" + "fri" + i).hide();
+                            $("#insert" + "sat" + i).hide();
+                            $("#edit" + "sat" + i).hide();
+                            $("#delete" + "sat" + i).hide();
+                            $("#insert" + "sun" + i).hide();
+                            $("#edit" + "sun" + i).hide();
+                            $("#delete" + "sun" + i).hide();
+                        }
+
+                        // if id.slice(0,3)=="mon"(
+                        //
+                        // )
+                        // $("#post-url").val()
                     }
-                });
-            }
+                    // console.log("userkey", userkey)
+                    // console.log("key", key)
+
+                }
+            })
+
+        }
 
             function showday(id) {
                 id = id.split('k');
@@ -716,15 +796,31 @@
                     <!---------------YD------------------->
                     <!---------------YD------------------->
                     <!---------------YD------------------->
-                    <div class="undefined">
-                        <div class="content_name">
-                            <div>DEV HISTORY</div>
-                        </div>
-                        <div class="blank" style="height:1%"></div>
-                        <div class="content_contents">
-                            <div style="width: 100%" id="develophistory" class="list-group"></div>
+            <div class="undefined">
+                <div class="content_name">
+                    <div>DEV HISTORY</div>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            유저 검색
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {%for user in allusers%}
+                            {% set name = user['name'] %}
+                            {% set key = user['key'] %}
+                            <a class="dropdown-item" onclick="showDevelopHistory('{{key}}')">{{name}}</a>
+                            {%endfor%}
                         </div>
                     </div>
+
+                </div>
+
+
+                <div class="blank" style="height:1%"></div>
+                <div class="content_contents">
+                    <div style="width: 100%" id="develophistory" class="list-group"></div>
+                </div>
+            </div>
                     <!---------------YD------------------->
                     <!---------------YD------------------->
                     <!---------------YD------------------->
@@ -733,7 +829,7 @@
             <div class="blank" style="height:10%"></div>
             <div class="footer">
                 <div class="signature" style="color:white;">
-                    <strong>Copyright 2020. 7조 김영동/최성현/조정훈. All rights reserved</strong>
+                    <strong>Copyright 2020. Week00 7조 김영동/최성현/조정훈. All rights reserved</strong>
                 </div>
             </div>
         </div>
